@@ -1,0 +1,24 @@
+{
+    "boss": true,
+    "browser": true,
+    "curly": true,
+    "eqeqeq": true,
+    "eqnull": true,
+    "expr": true,
+    "immed": true,
+    "indent": 4,
+    "latedef": true,
+    "multistr": true,
+    "newcap": true,
+    "noarg": true,
+    "quotmark": "single",
+    "strict": true,
+    "sub": true,
+    "trailing": true,
+    "undef": true,
+    "unused": true,
+    "white": true,
+    "node": true,
+    "globals": {
+    }
+}

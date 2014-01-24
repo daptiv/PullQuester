@@ -1,0 +1,22 @@
+{
+    "developers": [
+        {
+            "value": "@akalman",
+            "name": "Adam Kalman"
+        },
+        {
+            "value": "@chrisbobo",
+            "name": "Chris Bobo"
+        },
+        {
+            "value": "@park9140",
+            "name": "Jonathan Park"
+        }
+    ],
+    "testers": [
+        {
+            "value": "@aschmitt-daptiv ",
+            "name": "Aaron Schmitt"
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+<%= title %>
+
+===REVIEW===
+<% _.forEach(reviewers, function(reviewer) { %> - [ ] <%- reviewer %>
+<% }); %>
+===Testing===
+ - [ ] [Teamcity tests pass](http://teamcity.hq.daptiv.com/viewType.html?buildTypeId=Spa_CheckinGate&branch=<%= branchname %>&tab=buildTypeStatusDiv)
+<% _.forEach(testers, function(reviewer) { %> - [ ] <%- reviewer %>
+<% }); %>
