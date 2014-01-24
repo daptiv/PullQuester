@@ -1,22 +1,49 @@
 {
     "developers": [
         {
-            "value": "@akalman",
-            "name": "Adam Kalman"
+            "name": "chrisbobo",
+            "value": "@chrisbobo"
         },
         {
-            "value": "@chrisbobo",
-            "name": "Chris Bobo"
+            "name": "jacobboland",
+            "value": "@jacobboland"
         },
         {
-            "value": "@park9140",
-            "name": "Jonathan Park"
+            "name": "park9140",
+            "value": "@park9140"
+        },
+        {
+            "name": "akalman",
+            "value": "@akalman"
         }
     ],
     "testers": [
         {
-            "value": "@aschmitt-daptiv ",
-            "name": "Aaron Schmitt"
+            "name": "chrisbobo",
+            "value": "@chrisbobo"
+        },
+        {
+            "name": "jacobboland",
+            "value": "@jacobboland"
+        },
+        {
+            "name": "park9140",
+            "value": "@park9140"
+        },
+        {
+            "name": "akalman",
+            "value": "@akalman"
         }
-    ]
+    ],
+    "requirements": [
+        {
+            "name": "Documentation",
+            "value": "Add documentation for this thing"
+        }
+    ],
+    "questions": [{
+        "name": "questionsAsked",
+        "type": "confirm",
+        "message": "Did this custom question get added?"
+    }]
 }

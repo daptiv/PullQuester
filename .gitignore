@@ -1,0 +1,38 @@
+# Temporary files
+*~
+
+## Node gitignore https://github.com/github/gitignore/blob/master/Node.gitignore
+*.csv
+*.dat
+*.gz
+*.log
+*.out
+*.pid
+*.seed
+*.sln
+*.suo
+lib-cov
+logs
+node_modules
+npm-debug.log
+pids
+results
+*.sublime-workspace
+
+## WebStorm
+.DS_Store
+*.iml
+*.ipr
+*.iws
+
+/.idea/*
+
+#Include scopes so they can be shared by team members.
+!/.idea/scopes/
+
+#project build/install
+output/
+vendor/
+
+#ignore 3rd party difinitions installed via node
+src/ts-definitions

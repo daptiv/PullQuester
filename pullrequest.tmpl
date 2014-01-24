@@ -1,9 +1,16 @@
-<%= title %>
+<%= config.title %>
 
-===REVIEW===
-<% _.forEach(reviewers, function(reviewer) { %> - [ ] <%- reviewer %>
+<% if (config.questionsAsked) { %>The questions have been asked <% } else { %>The questsions were not asked<% } %>
+
+<%= config.description %>
+<% if (config.reviewers && config.reviewers.length > 0) { %>===CODE REVIEW===<% } %>
+<% _.forEach(config.reviewers, function(reviewer) { %> - [ ] <%- reviewer %>
 <% }); %>
-===Testing===
- - [ ] [Teamcity tests pass](http://teamcity.hq.daptiv.com/viewType.html?buildTypeId=Spa_CheckinGate&branch=<%= branchname %>&tab=buildTypeStatusDiv)
-<% _.forEach(testers, function(reviewer) { %> - [ ] <%- reviewer %>
+
+<% if (config.testers && config.testers.length > 0) { %>===Testing===<% }%>
+<% _.forEach(config.testers, function(reviewer) { %> - [ ] <%- reviewer %>
+<% }); %>
+
+<% if (config.additionalRequirements && config.additionalRequirements.length > 0) { %>===Additional Requirements===<% } %>
+<% _.forEach(config.additionalRequirements, function(additionalRequirement) { %> - [ ] <%- additionalRequirement %>
 <% }); %>

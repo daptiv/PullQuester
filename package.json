@@ -1,15 +1,17 @@
 {
   "name": "pullrequest",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Issues a pull request using configuration files in your current repo.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "",
   "license": "BSD-2-Clause",
   "dependencies": {
     "inquirer": "~0.4.0",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "github": "~0.1.12",
+    "q": "~1.0.0",
+    "commander": "~2.1.0"
+  },
+  "bin": {
+    "pull": "./bin/cli.js"
   }
 }
