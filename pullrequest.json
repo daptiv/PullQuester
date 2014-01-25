@@ -18,5 +18,11 @@
             "value": "@aschmitt-daptiv ",
             "name": "Aaron Schmitt"
         }
+    ],
+    "requirements": [
+        {
+            "value": "Documention is updated",
+            "name": "Documentation"
+        }
     ]
 }
