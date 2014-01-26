@@ -1,14 +1,14 @@
-<%= title %>
+<%= config.title %>
 
-<%= description %>
-<% if (reviewers) { %>===CODE REVIEW===<% }); %>
-<% _.forEach(reviewers, function(reviewer) { %> - [ ] <%- reviewer %>
+<%= config.description %>
+<% if (config.reviewers && config.reviewers.length > 0) { %>===CODE REVIEW===<% } %>
+<% _.forEach(config.reviewers, function(reviewer) { %> - [ ] <%- reviewer %>
 <% }); %>
 
-<% if (testers) { %>===Testing===<% }); %>
-<% _.forEach(testers, function(reviewer) { %> - [ ] <%- reviewer %>
+<% if (config.testers && config.testers.length > 0) { %>===Testing===<% }%>
+<% _.forEach(config.testers, function(reviewer) { %> - [ ] <%- reviewer %>
 <% }); %>
 
-<% if (additionalRequirements) { %>===Additional Requirements===<% }); %>
-<% _.forEach(additionalRequirements, function(additionalRequirement) { %> - [ ] <%- additionalRequirement %>
+<% if (config.additionalRequirements && config.additionalRequirements.length > 0) { %>===Additional Requirements===<% } %>
+<% _.forEach(config.additionalRequirements, function(additionalRequirement) { %> - [ ] <%- additionalRequirement %>
 <% }); %>

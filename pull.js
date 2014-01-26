@@ -76,10 +76,13 @@ module.exports = function () {
         inquirer.prompt(promptQuestions, function (answers) {
             answers.branchname = branchname;
             answers.buildTypeId = configValue.buildTypeId;
-            var pullrequest = _.template(templateValue, answers);
+            var pullrequest = _.template(templateValue, answers, {
+                variable: 'config'
+            });
             pullrequest.replace('\'', '\'');
             console.log(pullrequest);
             exec('hub pull-request -m \'' + pullrequest + '\'', function (error, stdout) {
+                console.log('ahsd');
                 if (error) {
                     console.log('Pull success');
                     console.log(error);

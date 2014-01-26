@@ -1,30 +1,44 @@
 {
     "developers": [
         {
-            "name": "allenarthurgay",
-            "value": "@allenarthurgay"
+            "name": "chrisbobo",
+            "value": "@chrisbobo"
         },
         {
-            "name": "SQLBob",
-            "value": "@SQLBob"
+            "name": "jacobboland",
+            "value": "@jacobboland"
+        },
+        {
+            "name": "park9140",
+            "value": "@park9140"
+        },
+        {
+            "name": "akalman",
+            "value": "@akalman"
         }
     ],
     "testers": [
         {
-            "name": "allenarthurgay",
-            "value": "@allenarthurgay"
-        },
-        {
-            "name": "bramy",
-            "value": "@bramy"
-        },
-        {
-            "name": "brian-d",
-            "value": "@brian-d"
-        },
-        {
             "name": "chrisbobo",
             "value": "@chrisbobo"
+        },
+        {
+            "name": "jacobboland",
+            "value": "@jacobboland"
+        },
+        {
+            "name": "park9140",
+            "value": "@park9140"
+        },
+        {
+            "name": "akalman",
+            "value": "@akalman"
+        }
+    ],
+    "requirements": [
+        {
+            "name": "Documentation",
+            "value": "Add documentation for this thing"
         }
     ]
 }
