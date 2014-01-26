@@ -1,28 +1,44 @@
 {
     "developers": [
         {
-            "value": "@akalman",
-            "name": "Adam Kalman"
+            "name": "chrisbobo",
+            "value": "@chrisbobo"
         },
         {
-            "value": "@chrisbobo",
-            "name": "Chris Bobo"
+            "name": "jacobboland",
+            "value": "@jacobboland"
         },
         {
-            "value": "@park9140",
-            "name": "Jonathan Park"
+            "name": "park9140",
+            "value": "@park9140"
+        },
+        {
+            "name": "akalman",
+            "value": "@akalman"
         }
     ],
     "testers": [
         {
-            "value": "@aschmitt-daptiv ",
-            "name": "Aaron Schmitt"
+            "name": "chrisbobo",
+            "value": "@chrisbobo"
+        },
+        {
+            "name": "jacobboland",
+            "value": "@jacobboland"
+        },
+        {
+            "name": "park9140",
+            "value": "@park9140"
+        },
+        {
+            "name": "akalman",
+            "value": "@akalman"
         }
     ],
     "requirements": [
         {
-            "value": "Documention is updated",
-            "name": "Documentation"
+            "name": "Documentation",
+            "value": "Add documentation for this thing"
         }
     ]
 }
