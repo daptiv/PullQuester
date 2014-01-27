@@ -7,7 +7,8 @@ Installation
 ============
 
 Install hub via instructions in readme https://github.com/github/hub
-npm install -g git@github.com:ttps:daptiv/PullQuester
+
+  npm install -g git@github.com:ttps:daptiv/PullQuester
 
 Configuration
 =============
