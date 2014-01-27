@@ -8,14 +8,18 @@ Installation
 
 Install hub via instructions in readme https://github.com/github/hub
 
-  npm install -g git@github.com:ttps:daptiv/PullQuester
+```
+npm install -g git@github.com:ttps:daptiv/PullQuester
+```
 
 Configuration
 =============
 
 Move to root directory of the repo you wish to add the pull request configuration to and run
 
-  pull --init
+```
+pull --init
+```
   
 Follow the prompts to initialize the tool
 
