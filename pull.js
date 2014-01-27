@@ -82,7 +82,6 @@ module.exports = function () {
             pullrequest.replace('\'', '\'');
             console.log(pullrequest);
             exec('hub pull-request -m \'' + pullrequest + '\'', function (error, stdout) {
-                console.log('ahsd');
                 if (error) {
                     console.log('Pull success');
                     console.log(error);
