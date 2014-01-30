@@ -9,7 +9,7 @@ Installation
 Install hub via instructions in readme https://github.com/github/hub
 
 ```
-npm install -g git+ssh://git@github.com:daptiv/PullQuester.git
+npm install -g pullquester
 ```
 
 Configuration
