@@ -91,7 +91,7 @@ module.exports = function () {
             }
             exec('hub pull-request -m \'' + pullrequest + '\'', function (error, stdout) {
                 if (error) {
-                    console.log('Pull success');
+                    console.log('Pull failed:');
                     console.log(error);
                 }
                 console.log('Pull success');
