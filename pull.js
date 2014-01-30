@@ -86,10 +86,11 @@ module.exports = function () {
             pullrequest.replace('\'', '\'');
             console.log(pullrequest);
 			var request = 'hub pull-request -m \'' + pullrequest + '\'';
+			request = request.replace('\n', '\n\r');
 			console.log(request);
             exec(request, function (error, stdout) {
                 if (error) {
-                    console.log('Pull unsuccess');
+                    console.log('Pull error');
                     console.log(error);
                 }
                 console.log('Pull success');
