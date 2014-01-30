@@ -85,9 +85,11 @@ module.exports = function () {
             });
             pullrequest.replace('\'', '\'');
             console.log(pullrequest);
-            exec('hub pull-request -m \'' + pullrequest + '\'', function (error, stdout) {
+			var request = 'hub pull-request -m \'' + pullrequest + '\'';
+			console.log(request);
+            exec(request, function (error, stdout) {
                 if (error) {
-                    console.log('Pull success');
+                    console.log('Pull unsuccess');
                     console.log(error);
                 }
                 console.log('Pull success');
