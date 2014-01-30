@@ -73,6 +73,10 @@ module.exports = function () {
                 });
         }
 
+        if (configValue.questions) {
+            promptQuestions.push.apply(promptQuestions, configValue.questions);
+        }
+
         inquirer.prompt(promptQuestions, function (answers) {
             answers.branchname = branchname;
             answers.buildTypeId = configValue.buildTypeId;

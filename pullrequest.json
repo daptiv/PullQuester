@@ -40,5 +40,10 @@
             "name": "Documentation",
             "value": "Add documentation for this thing"
         }
-    ]
+    ],
+    "questions": [{
+        "name": "questionsAsked",
+        "type": "confirm",
+        "message": "Did this custom question get added?"
+    }]
 }

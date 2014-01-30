@@ -20,11 +20,17 @@ Move to root directory of the repo you wish to add the pull request configuratio
 ```
 pull --init
 ```
-  
+
 Follow the prompts to initialize the tool
+
+Custom questions can be added by adding Inquirer question configs to the pullrequest.json config file.
+
+https://github.com/SBoudrias/Inquirer.js
+
+answers are added to the config in the template.
 
 Usage
 =====
 
-Ensure your branch is pushed, and you are currently in the branch you want pulled. 
+Ensure your branch is pushed, and you are currently in the branch you want pulled.
 Then just run `pull` and follow the promps
