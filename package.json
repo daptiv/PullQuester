@@ -1,8 +1,14 @@
 {
-  "name": "pullrequest",
-  "version": "0.0.1",
+  "name": "pullquester",
+  "version": "0.1.0",
   "description": "Issues a pull request using configuration files in your current repo.",
-  "author": "",
+  "author": "Jonathan Park",
+  "keywords": [
+    "github",
+    "manager",
+    "pull",
+    "request"
+  ],
   "license": "BSD-2-Clause",
   "dependencies": {
     "inquirer": "~0.4.0",
@@ -11,6 +17,14 @@
     "q": "~1.0.0",
     "commander": "~2.1.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daptiv/PullQuester"
+  },
+  "bugs": {
+    "url": "http://github.com/daptiv/PullQuester/issues"
+  },
+  "preferGlobal": true,
   "bin": {
     "pull": "./bin/cli.js"
   }
