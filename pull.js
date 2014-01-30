@@ -3,6 +3,7 @@ var inquirer = require('inquirer');
 var exec =  require('child_process').exec;
 var _ = require('lodash');
 var Q = require('q');
+var os = require('os');
 
 var config = require('./config');
 var template = require('./template');
@@ -85,6 +86,9 @@ module.exports = function () {
             });
             pullrequest.replace('\'', '\'');
             console.log(pullrequest);
+            if (os.platform() === 'win32') {
+                pullrequest.replace('\n', '^\n\n');
+            }
             exec('hub pull-request -m \'' + pullrequest + '\'', function (error, stdout) {
                 if (error) {
                     console.log('Pull success');
