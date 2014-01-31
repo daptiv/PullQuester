@@ -47,7 +47,7 @@ module.exports = function () {
                             return {
                                 name: user.name || user.login,
                                 value: {
-                                    name: user.login,
+                                    name: user.name,
                                     value: '@' + user.login
                                 }
                             };
@@ -81,7 +81,12 @@ module.exports = function () {
                         ], function (answers) {
                             if (answers.confirmCreation) {
                                 configValue.developers = answers.developers;
-                                configValue.testers = answers.testers;
+                                if (answers.testers.length > 0) {
+                                    configValue.testers = answers.testers;
+                                }
+                                else {
+                                    delete configValue.testers;
+                                }
                                 config.set(configValue);
                                 template.createDefaultIfNotExists();
                             }

@@ -85,10 +85,10 @@ module.exports = function () {
                 variable: 'config'
             });
             pullrequest.replace('\'', '\'');
-            console.log(pullrequest);
             if (os.platform() === 'win32') {
                 pullrequest.replace('\n', '^\n\n');
             }
+            console.log(pullrequest);
             exec('hub pull-request -m \'' + pullrequest + '\'', function (error, stdout) {
                 if (error) {
                     console.log('Pull failed:');
