@@ -54,8 +54,8 @@ module.exports = function () {
                         });
                     })).then(function (githubMembers) {
                         var configValue = config.get() || {},
-                            currentTesters  = _.map(configValue.testers, function (item) { return _.find(_.pluck(githubMembers, 'value'), item); }),
-                            currentDevelopers  = _.map(configValue.developers, function (item) { return _.find(_.pluck(githubMembers, 'value'), item); });
+                            currentTesters  = _.map(configValue.testers, function (item) { return _.find(_.pluck(githubMembers, 'value'), {value: item.value}); }),
+                            currentDevelopers  = _.map(configValue.developers, function (item) { return _.find(_.pluck(githubMembers, 'value'), {value: item.value}); });
                         console.log(currentTesters);
                         githubMembers = _.sortBy(githubMembers, 'name');
                         inquirer.prompt([
