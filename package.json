@@ -1,6 +1,6 @@
 {
   "name": "pullquester",
-  "version": "0.1.27",
+  "version": "0.2.0",
   "description": "Issues a pull request using configuration files in your current repo.",
   "author": "Jonathan Park <jpark@daptiv.com>",
   "keywords": [
