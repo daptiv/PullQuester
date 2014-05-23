@@ -5,13 +5,42 @@ var _ = require('lodash');
 var Q = require('q');
 var config = require('./config');
 var template = require('./template');
+var exec =  require('child_process').exec;
 
 var GitHubApi = require('github');
-
 var github = new GitHubApi({
     // required
     version: '3.0.0'
 });
+
+var GITHUB_REMOTE_REGEXP = /github\.com:([^\/]+)\/([^\/]+) \(fetch\)$/;
+function getCollaborators() {
+    var deferred = Q.defer();
+
+    exec('git remote -v', function(error, stdout, stderr) {
+        var remotes = stdout.toString().split('\n');
+
+        inquirer.prompt([
+            {
+                name: 'remote',
+                type: 'list',
+                message: 'Choose a remote to get collaborators for',
+                choices: _.filter(remotes, function(remote) { return GITHUB_REMOTE_REGEXP.test(remote); })
+            }
+        ], function(answers) {
+            answers.remote.match(GITHUB_REMOTE_REGEXP);
+
+            Q.nfcall
+            (
+                github.repos.getCollaborators,
+                { user: RegExp.$1, repo: RegExp.$2, per_page: 100 }
+            ).then(function(users) { deferred.resolve(users); });
+        });
+    });
+
+    return deferred.promise;
+}
+
 module.exports = function () {
 
     inquirer.prompt([
@@ -33,15 +62,25 @@ module.exports = function () {
         });
 
         Q.nfcall(github.user.getOrgs, {}).then(function (orgs) {
+            var orgsToDisplay = _.pluck(orgs, 'login');
+            orgsToDisplay.push('none');
+
             inquirer.prompt([
                 {
                     name: 'org',
                     type: 'list',
                     message: 'Choose the org you wish to view',
-                    choices: _.pluck(orgs, 'login')
+                    choices: orgsToDisplay
                 }
             ], function (answers) {
-                Q.nfcall(github.orgs.getMembers, {org: answers.org, per_page: 100}).then(function (users) {
+                var usersPromise;
+                if (answers.org === 'none') {
+                    usersPromise = getCollaborators();
+                } else {
+                    usersPromise = Q.nfcall(github.orgs.getMembers, {org: answers.org, per_page: 100});
+                }
+
+                usersPromise.then(function (users) {
                     Q.all(_.map(users, function (user) {
                         return Q.nfcall(github.user.getFrom, { user: user.login}).then(function (user) {
                             return {
