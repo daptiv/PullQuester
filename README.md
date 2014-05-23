@@ -15,6 +15,8 @@ npm install -g pullquester
 Configuration
 =============
 
+Ensure that hub is installed and you have provided credentials to it. Hub will ask for credentials the first time it needs them.  http://hub.github.com
+
 Move to root directory of the repo you wish to add the pull request configuration to and run
 
 ```
