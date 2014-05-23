@@ -27,9 +27,6 @@ results
 
 /.idea/*
 
-#Include scopes so they can be shared by team members.
-!/.idea/scopes/
-
 #project build/install
 output/
 vendor/
