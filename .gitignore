@@ -27,9 +27,4 @@ results
 
 /.idea/*
 
-#project build/install
-output/
-vendor/
-
-#ignore 3rd party difinitions installed via node
-src/ts-definitions
+node_modules/

@@ -1,7 +1,5 @@
 <%= config.title %>
 
-<% if (config.questionsAsked) { %>The questions have been asked <% } else { %>The questsions were not asked<% } %>
-
 <%= config.description %>
 <% if (config.reviewers && config.reviewers.length > 0) { %>===CODE REVIEW===<% } %>
 <% _.forEach(config.reviewers, function(reviewer) { %> - [ ] <%- reviewer %>

@@ -57,23 +57,25 @@ module.exports = function () {
             });
         }
 
+        var separator = [new inquirer.Separator()];
+
         if (configValue.developers) {
             promptQuestions.push({
                 name: 'reviewers',
                 type: 'checkbox',
                 message: 'Select reviewers:',
-                choices: configValue.developers
+                choices: _.sortBy(configValue.developers, 'name').concat(separator)
             });
         }
 
 
         if (configValue.testers) {
             promptQuestions.push({
-                    name: 'testers',
-                    type: 'checkbox',
-                    message: 'Select testers:',
-                    choices: configValue.testers
-                });
+                name: 'testers',
+                type: 'checkbox',
+                message: 'Select testers:',
+                choices: _.sortBy(configValue.testers, 'name').concat(separator)
+            });
         }
 
         if (configValue.questions) {
