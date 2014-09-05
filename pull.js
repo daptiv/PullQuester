@@ -79,7 +79,18 @@ module.exports = function () {
         }
 
         if (configValue.questions) {
-            promptQuestions.push.apply(promptQuestions, configValue.questions);
+            var questions = _.map(configValue.questions, function(question) {
+                if (question.when) {
+                    var conditional = question.when;
+                    question.when = function(answers) {
+                        return answers[conditional];
+                    };
+                }
+
+                return question;
+            });
+
+            promptQuestions.push.apply(promptQuestions, questions);
         }
 
         inquirer.prompt(promptQuestions, function (answers) {
