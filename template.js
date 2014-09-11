@@ -5,6 +5,7 @@ var fs = require('fs'),
 
 module.exports = {
     get: function () {
+
         try {
             return fs.readFileSync(templateLocation);
         } catch (error) {
