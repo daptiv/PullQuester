@@ -1,7 +1,7 @@
 var Q = require('q'),
   inquirer = require('inquirer');
 
-function promt(questions) {
+function prompt(questions) {
     return Q.ninvoke(inquirer, 'prompt', questions);
 }
 
