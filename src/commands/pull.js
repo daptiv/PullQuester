@@ -1,6 +1,7 @@
 'use strict';
 var inquirer = require('../inquirerWrapper');
 var exec =  require('child_process').exec;
+var spawn =  require('child_process').spawn;
 var _ = require('lodash');
 var Q = require('q');
 var temp = require('temp');
@@ -79,16 +80,12 @@ module.exports = function () {
                     console.log(request);
                     var env = process.env;
                     env.REQUEST = pullrequest;
-                    exec(request, {env: env}, function (error, stdout) {
-                        if (error) {
-                            console.log('Pull failed:');
-                            console.log(error);
-                            return;
-                        }
-                        console.log('Pull success');
-                        console.log(stdout);
+
+                    process.on('exit', function() {
                         temp.cleanup();
                     });
+
+                    spawn('hub', ['pull-request', '-F', pullFile.path], { stdio: 'inherit' });
                 });
 
         });
