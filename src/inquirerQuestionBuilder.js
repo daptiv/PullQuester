@@ -52,7 +52,8 @@ function InquirerQuestionsBuilder() {
             type: 'list',
             message: message,
             choices: choices
-        })
+        });
+
         return this;
     };
 

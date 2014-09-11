@@ -6,13 +6,19 @@ var Q = require('q'),
     });
 
 function authenticate(username, password) {
+    var deferred = Q.defer();
+
     var options = {
         type: 'basic',
         username: username,
         password: password
     };
 
-    return Q.ninvoke(github, 'authenticate', options);
+    github.authenticate(options);
+
+    deferred.resolve();
+
+    return deferred.promise
 }
 
 function getOrganizations() {
