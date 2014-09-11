@@ -1,22 +1,10 @@
 var Q = require('q'),
-    inquirer = require('inquirer'),
-    github = new GitHubApi({
-        // required
-        version: '3.0.0'
-    });
+  inquirer = require('inquirer');
 
-function promt(username, password) {
-    var options = {
-        type: 'basic',
-        username: username,
-        password: password
-    };
-
-    return Q.ninvoke(github, 'authenticate', options);
+function promt(questions) {
+    return Q.ninvoke(inquirer, 'prompt', questions);
 }
 
-
-
 module.exports = {
-    prompt: authenticate
+    prompt: prompt
 };
