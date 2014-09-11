@@ -7,8 +7,8 @@ var temp = require('temp');
 var fs = require('fs');
 temp.track();
 
-var config = require('./config');
-var template = require('./template');
+var config = require('./../../config');
+var template = require('./../../template');
 
 module.exports = function () {
     var gitBranchPromise = Q.nfcall(exec, 'git rev-parse --abbrev-ref HEAD').catch(function (error) {
