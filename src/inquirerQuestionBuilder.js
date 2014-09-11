@@ -52,7 +52,9 @@ function InquirerQuestionsBuilder() {
             type: 'list',
             message: message,
             choices: choices
-        })
+        });
+
+        return this;
     };
 
     this.withConfirmQuestion = function(name, message) {

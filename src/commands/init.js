@@ -71,7 +71,7 @@ module.exports = function () {
             if (answers.org === 'none') {
                 usersPromise = getCollaborators();
             } else {
-                usersPromise = Q.nfcall(github.orgs.getMembers, {org: answers.org, per_page: 100});
+                usersPromise = github.getMembers(answers.org);
             }
 
             return usersPromise;
@@ -122,6 +122,7 @@ module.exports = function () {
 
         // write out files
         .then(function (answers) {
+            console.log('creating files');
             if (answers.confirmCreation) {
                 configValue.developers = answers.developers;
                 if (answers.testers.length > 0) {
@@ -131,6 +132,8 @@ module.exports = function () {
                     delete configValue.testers;
                 }
                 config.set(configValue);
+
+                console.log('creating default template if not exists');
                 template.createDefaultIfNotExists();
             }
         })
