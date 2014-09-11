@@ -53,6 +53,7 @@ function InquirerQuestionsBuilder() {
             message: message,
             choices: choices
         })
+        return this;
     };
 
     this.withConfirmQuestion = function(name, message) {
@@ -65,8 +66,8 @@ function InquirerQuestionsBuilder() {
         return this;
     };
 
-    this.withUserDefinedQuestions = function(questions) {
-        questions = questions.concat(questions);
+    this.withUserDefinedQuestions = function(userQuestions) {
+        questions = questions.concat(userQuestions);
 
         return this;
     };
