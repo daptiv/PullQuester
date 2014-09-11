@@ -82,8 +82,8 @@ InquirerQuestionsBuilder.GithubAuth = (function() {
     var builder = new InquirerQuestionsBuilder();
 
     return builder
-        .withInputQuestion(username, 'Input your github username to get a list of github users associated with your project:')
-        .withPasswordQuestion(password, 'password:')
+        .withInputQuestion('username', 'Input your github username to get a list of github users associated with your project:')
+        .withPasswordQuestion('password', 'password:')
         .build();
 })();
 

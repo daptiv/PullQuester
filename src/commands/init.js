@@ -44,11 +44,13 @@ module.exports = function () {
 
         // authenticate github api
         .then(function (answers) {
+            console.log('authenticating');
             return github.authenticate(answers.username, answers.password);
         })
 
         // get github organizations for user
         .then(function() {
+            console.log('getting organizations');
             return github.getOrganizations();
         })
 
