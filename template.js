@@ -23,6 +23,7 @@ module.exports = {
         } catch (error) {
             return;
         }
+
     },
     set: function (template) {
         try {
