@@ -14,8 +14,6 @@ function authenticate(username, password) {
         password: password
     };
 
-    console.log('calling github');
-
     github.authenticate(options);
 
     deferred.resolve();

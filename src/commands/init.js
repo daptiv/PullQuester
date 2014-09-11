@@ -44,13 +44,11 @@ module.exports = function () {
 
         // authenticate github api
         .then(function (answers) {
-            console.log('authenticating');
             return github.authenticate(answers.username, answers.password);
         })
 
         // get github organizations for user
         .then(function() {
-            console.log('getting organizations');
             return github.getOrganizations();
         })
 
@@ -104,7 +102,7 @@ module.exports = function () {
                 });
 
             githubMembers = _.sortBy(githubMembers, 'name');
-            inquirer.prompt(
+            return inquirer.prompt(
                 new InquirerQuestionBuilder()
                     .withCheckboxQuestion(
                         'developers',
@@ -122,8 +120,9 @@ module.exports = function () {
 
         // write out files
         .then(function (answers) {
-            console.log('creating files');
             if (answers.confirmCreation) {
+                var configValue = config.get() || {};
+
                 configValue.developers = answers.developers;
                 if (answers.testers.length > 0) {
                     configValue.testers = answers.testers;
@@ -133,7 +132,6 @@ module.exports = function () {
                 }
                 config.set(configValue);
 
-                console.log('creating default template if not exists');
                 template.createDefaultIfNotExists();
             }
         })
