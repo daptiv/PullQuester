@@ -20,7 +20,6 @@ function Template(location) {
         try {
             return fs.writeFileSync(location,  template);
         } catch (error) {
-            console.log(error);
             return;
         }
     };

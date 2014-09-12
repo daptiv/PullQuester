@@ -19,7 +19,6 @@ function Configuration(location) {
         try {
             return fs.writeFileSync(location,  JSON.stringify(config, null, 4));
         } catch (error) {
-            console.log(error);
             return;
         }
     };
