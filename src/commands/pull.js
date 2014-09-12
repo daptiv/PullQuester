@@ -20,12 +20,17 @@ module.exports = function (id) {
 
     Q.all(gitBranchPromise)
         .then(function (results) {
+            var template = Template.default;
+            var config = Config.default;
+
+            if (id) {
+                template = new Template(Template.createPathFromId(id));
+                config = new Config(Config.createPathFromId(id));
+            }
 
             var branchname = results[0].replace(/^\s+|\s+$/g, ''),
                 storyIdMatches = branchname.match(/^\d+/),
                 storyId = storyIdMatches ? storyIdMatches[0] : '',
-                template = new Template(Template.createPathFromId(id)),
-                config = new Config(Config.createPathFromId(id)),
                 configValue = config.get(),
                 builder = new InquirerQuestionBuilder();
 

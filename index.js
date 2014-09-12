@@ -1,14 +1,16 @@
 'use strict';
 var program = require('commander');
+var _ = require('lodash');
 
 function noCommandRan() {
-    if (program.args.length === 0) {
-        return true;
-    }
+    var noCommandRan = true;
+    _.each(program.args, function(arg) {
+        if (typeof arg === 'object') {
+            noCommandRan = false;
+        }
+    });
 
-    var command = program.args[0];
-
-    return !(command === 'install' || command === 'init');
+    return noCommandRan;
 }
 
 function enumFilter() {

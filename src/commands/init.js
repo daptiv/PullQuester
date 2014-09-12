@@ -130,7 +130,7 @@ module.exports = function (id, source) {
 
         // have user choose subsets of returned users to include as testers and/or developers
         .then(function (githubMembers) {
-            var configValue = config.get(),
+            var configValue = config.get() || {},
                 currentTesters = _.map(configValue.testers, function (item) {
                     return _.find(_.pluck(githubMembers, 'value'), {value: item.value});
                 }),
