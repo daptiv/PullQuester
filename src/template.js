@@ -2,11 +2,12 @@
 var _ = require('lodash');
 var fs = require('fs');
 var path = require('path');
-var templateLocation = process.cwd() + '/pullrequest.tmpl',
+var templateLocation = process.cwd() + '/.pullquester' + '/pullrequest.tmpl',
     defaultTemplateLocation = __dirname + '/pullrequest.tmpl';
 
 function Template(location) {
-    var location = path.resolve(process.cwd(), location);
+    var location = path.resolve(process.cwd(), '.pullquester', location);
+    console.log('template: ' + location);
 
     this.get = function() {
         try {
@@ -20,6 +21,7 @@ function Template(location) {
         try {
             return fs.writeFileSync(location,  template);
         } catch (error) {
+            console.log(error);
             return;
         }
     };

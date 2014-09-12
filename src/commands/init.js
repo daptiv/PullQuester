@@ -6,6 +6,7 @@ var Q = require('q');
 var Config = require('../config');
 var Template = require('../template');
 var exec =  require('child_process').exec;
+var fs = require('fs');
 
 var github = require('../githubWrapper');
 var InquirerQuestionBuilder = require('../inquirerQuestionBuilder');
@@ -158,6 +159,8 @@ module.exports = function (id, source) {
         // write out files
         .then(function (answers) {
             if (answers.confirmCreation) {
+                fs.mkdir('.pullquester', function() { });
+
                 var configValue = config.get() || {};
 
                 configValue.developers = answers.developers;
