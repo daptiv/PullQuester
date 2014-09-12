@@ -35,6 +35,22 @@ function getCollaborators(user, repository) {
     return Q.ninvoke(github.repos, 'getCollaborators', options);
 }
 
+function getTeams(organization) {
+    var options = {
+        org: organization
+    };
+
+    return Q.ninvoke(github.orgs, 'getTeams', options);
+}
+
+function getTeamMembers(teamId) {
+    var options = {
+        id: teamId
+    };
+
+    return Q.ninvoke(github.orgs, 'getTeamMembers', options)
+}
+
 function getMembers(organization) {
     var options = {
         org: organization,
@@ -56,6 +72,8 @@ module.exports = {
     authenticate: authenticate,
     getOrganizations: getOrganizations,
     getCollaborators: getCollaborators,
+    getTeams: getTeams,
+    getTeamMembers: getTeamMembers,
     getMembers: getMembers,
     getUser: getUser
 };
