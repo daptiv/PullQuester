@@ -2,7 +2,7 @@
 var _ = require('lodash');
 var fs = require('fs');
 var templateLocation = process.cwd() + '/pullrequest.tmpl',
-defaultTemplateLocation = __dirname + '/../pullrequest.tmpl';
+defaultTemplateLocation = __dirname + '/pullrequest.tmpl';
 
 function createDefault (){
     var defaultTemplate = fs.readFileSync(defaultTemplateLocation);
