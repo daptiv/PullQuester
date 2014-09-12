@@ -4,7 +4,7 @@ var inquirer = require('../inquirerWrapper');
 var _ = require('lodash');
 var Q = require('q');
 var config = require('./../../config');
-var template = require('./../../template');
+var template = require('./template');
 var exec =  require('child_process').exec;
 
 var github = require('../githubWrapper');
