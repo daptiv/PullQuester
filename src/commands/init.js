@@ -11,6 +11,7 @@ var github = require('../githubWrapper');
 var InquirerQuestionBuilder = require('../inquirerQuestionBuilder');
 
 var GITHUB_REMOTE_REGEXP = /github\.com:([^\/]+)\/([^\/]+) \(fetch\)$/;
+
 function getCollaborators() {
     var deferred = Q.defer();
 
@@ -38,7 +39,22 @@ function getCollaborators() {
     return deferred.promise;
 }
 
-module.exports = function () {
+function getOrganizationMembers() {
+    return github.getOrganizations()
+        .then(function(orgs) {
+            var orgsToDisplay = _.pluck(orgs, 'login');
+
+            return inquirer.prompt(
+                new InquirerQuestionBuilder()
+                    .withListQuestion('org', 'Choose the org you wish to view', orgsToDisplay)
+                    .build());
+        })
+        .then(function(answers) {
+            return github.getMembers(answers.org);
+        });
+}
+
+module.exports = function (source) {
 
     inquirer.prompt(InquirerQuestionBuilder.GithubAuth)
 
@@ -47,29 +63,14 @@ module.exports = function () {
             return github.authenticate(answers.username, answers.password);
         })
 
-        // get github organizations for user
-        .then(function() {
-            return github.getOrganizations();
-        })
-
-        // have user choose which organization to pull users from
-        .then(function(orgs) {
-            var orgsToDisplay = _.pluck(orgs, 'login');
-            orgsToDisplay.push('none');
-
-            return inquirer.prompt(
-                new InquirerQuestionBuilder()
-                    .withListQuestion('org', 'Choose the org you wish to view', orgsToDisplay)
-                    .build());
-        })
-
         // either get the collaborators for the repo, or get the members for the organization
-        .then(function(answers) {
+        .then(function() {
             var usersPromise;
-            if (answers.org === 'none') {
+
+            if (source === 'collab') {
                 usersPromise = getCollaborators();
             } else {
-                usersPromise = github.getMembers(answers.org);
+                usersPromise = getOrganizationMembers();
             }
 
             return usersPromise;
