@@ -13,7 +13,7 @@ var InquirerQuestionBuilder = require('../inquirerQuestionBuilder');
 var config = require('./../../config');
 var Template = require('../template');
 
-module.exports = function () {
+module.exports = function (id) {
     var gitBranchPromise = Q.nfcall(exec, 'git rev-parse --abbrev-ref HEAD').catch(function (error) {
         console.log('This is not a git repo or there was an error getting the branch name', error);
     });
@@ -23,7 +23,7 @@ module.exports = function () {
             var branchname = results[0].replace(/^\s+|\s+$/g, ''),
                 storyIdMatches = branchname.match(/^\d+/),
                 storyId = storyIdMatches ? storyIdMatches[0] : '',
-                templateValue = Template.default,
+                template = new Template(Template.createPathFromId(id)),
                 configValue = config.get(),
                 builder = new InquirerQuestionBuilder();
 
@@ -68,10 +68,7 @@ module.exports = function () {
                 .then(function (answers) {
                     answers.branchname = branchname;
                     answers.buildTypeId = configValue.buildTypeId;
-                    var pullrequest = templateValue.compile(answers);
-                    console.log(templateValue);
-                    console.log(pullrequest);
-
+                    var pullrequest = template.compile(answers);
 
                     var pullFile = temp.openSync();
                     fs.writeSync(pullFile.fd, pullrequest);

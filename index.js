@@ -1,6 +1,16 @@
 'use strict';
 var program = require('commander');
 
+function noCommandRan() {
+    if (program.args.length === 0) {
+        return true;
+    }
+
+    var command = program.args[0];
+
+    return !(command === 'install' || command === 'init');
+}
+
 function enumFilter() {
     var args = arguments;
     return function(val, defaultValue) {
@@ -15,7 +25,7 @@ function enumFilter() {
 }
 
 program
-    .option('-t --test', 'test option')
+    .option('-i, --id <id>', 'Id for the keyed template to use')
     .version('0.3.0');
 
 program.command('install')
@@ -35,7 +45,6 @@ program.command('init [id]')
 
 program.parse(process.argv);
 
-var NO_COMMAND_SPECIFIED = program.args.length === 0;
-if (NO_COMMAND_SPECIFIED) {
-    require('./src/commands/pull')();
+if (noCommandRan()) {
+    require('./src/commands/pull')(program.id || program.args[0]);
 }
