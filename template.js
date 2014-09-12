@@ -1,7 +1,7 @@
 'use strict';
 var fs = require('fs'),
     templateLocation = process.cwd() + '/pullrequest.tmpl',
-    defaultTemplateLocation = __dirname + '/pullrequest.tmpl';
+    defaultTemplateLocation = __dirname + '/src/pullrequest.tmpl';
 
 module.exports = {
     get: function () {
