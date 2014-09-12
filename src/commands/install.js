@@ -13,9 +13,9 @@ module.exports = function() {
                     'This install script is only supported on windows with ' +
                     'git bash.  If this fails please try again from git bash.');
 
-                exec('./install-hub.win.sh', function() { });
+                exec(__dirname + '/../../install-hub.win.sh', function() { });
             } else {
-                exec('./install-hub.sh', function() { });
+                exec(__dirname + '/../../install-hub.sh', function() { });
             }
         }
     });

@@ -159,7 +159,9 @@ module.exports = function (id, source) {
         // write out files
         .then(function (answers) {
             if (answers.confirmCreation) {
-                fs.mkdirSync('.pullquester');
+                if (fs.exists('.pullquester')) {
+                    fs.mkdirSync('.pullquester');
+                }
 
                 var configValue = config.get() || {};
 
