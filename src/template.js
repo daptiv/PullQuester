@@ -51,4 +51,8 @@ Template.default = (function() {
     return new Template(templateLocation);
 })();
 
+Template.createPathFromId = function(id) {
+    return 'pullrequest.' + id + '.tmpl';
+};
+
 module.exports = Template;
