@@ -10,7 +10,7 @@ temp.track();
 
 var InquirerQuestionBuilder = require('../inquirerQuestionBuilder');
 
-var config = require('./../../config');
+var Config = require('../config');
 var Template = require('../template');
 
 module.exports = function (id) {
@@ -20,10 +20,12 @@ module.exports = function (id) {
 
     Q.all(gitBranchPromise)
         .then(function (results) {
+
             var branchname = results[0].replace(/^\s+|\s+$/g, ''),
                 storyIdMatches = branchname.match(/^\d+/),
                 storyId = storyIdMatches ? storyIdMatches[0] : '',
                 template = new Template(Template.createPathFromId(id)),
+                config = new Config(Config.createPathFromId(id)),
                 configValue = config.get(),
                 builder = new InquirerQuestionBuilder();
 
@@ -31,7 +33,7 @@ module.exports = function (id) {
                 .withInputQuestion('storyId', 'StoryId:', storyId)
                 .withInputQuestion('description', 'Description of changes:', storyId);
 
-            if (!config) {
+            if (!configValue) {
                 console.log('Error: Pull not initialized pull --init to build one for your repository');
                 return;
             }

@@ -3,7 +3,7 @@
 var inquirer = require('../inquirerWrapper');
 var _ = require('lodash');
 var Q = require('q');
-var config = require('./../../config');
+var Config = require('../config');
 var Template = require('../template');
 var exec =  require('child_process').exec;
 
@@ -85,6 +85,10 @@ function getTeamMembers() {
 }
 
 module.exports = function (id, source) {
+    var config = Config.default;
+    if (id) {
+        config = new Config(Config.createPathFromId(id));
+    }
 
     inquirer.prompt(InquirerQuestionBuilder.GithubAuth)
 
@@ -126,7 +130,7 @@ module.exports = function (id, source) {
 
         // have user choose subsets of returned users to include as testers and/or developers
         .then(function (githubMembers) {
-            var configValue = config.get() || {},
+            var configValue = config.get(),
                 currentTesters = _.map(configValue.testers, function (item) {
                     return _.find(_.pluck(githubMembers, 'value'), {value: item.value});
                 }),
