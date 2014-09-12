@@ -54,6 +54,36 @@ function getOrganizationMembers() {
         });
 }
 
+function getTeamMembers() {
+    var teams;
+
+    return github.getOrganizations()
+        .then(function(orgs) {
+            var orgsToDisplay = _.pluck(orgs, 'login');
+
+            return inquirer.prompt(
+                new InquirerQuestionBuilder()
+                    .withListQuestion('org', 'Choose the org to get teams from', orgsToDisplay)
+                    .build());
+        })
+        .then(function(answers) {
+            return github.getTeams(answers.org);
+        })
+        .then(function(getTeamsResult) {
+            teams = getTeamsResult;
+
+            return inquirer.prompt(
+                new InquirerQuestionBuilder()
+                    .withListQuestion('team', 'Choose the team you wish to view', teams)
+                    .build());
+        })
+        .then(function(answers) {
+            var team = _.findWhere(teams, { name: answers.team });
+
+            return github.getTeamMembers(team.id);
+        });
+}
+
 module.exports = function (source) {
 
     inquirer.prompt(InquirerQuestionBuilder.GithubAuth)
@@ -69,6 +99,8 @@ module.exports = function (source) {
 
             if (source === 'collab') {
                 usersPromise = getCollaborators();
+            } else if (source == 'team') {
+                usersPromise = getTeamMembers();
             } else {
                 usersPromise = getOrganizationMembers();
             }
