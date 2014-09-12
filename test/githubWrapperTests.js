@@ -48,7 +48,7 @@ describe('githubwrapper.js Tests', function() {
       expect(result).to.have.property('then');
     });
 
-    it('should returna a promise from getUser', function() {
+    it('should return a promise from getUser', function() {
       var username = 'testUser'
       var result = gitHubWrapper.getUser(username);
 
