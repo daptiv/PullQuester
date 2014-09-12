@@ -6,7 +6,6 @@ var configLocation = process.cwd() + '/.pullquester' + '/pullrequest.json';
 
 function Configuration(location) {
     var location = path.resolve(process.cwd(), '.pullquester', location);
-    console.log('config: ' + location);
 
     this.get = function() {
         try {

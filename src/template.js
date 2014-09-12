@@ -7,7 +7,6 @@ var templateLocation = process.cwd() + '/.pullquester' + '/pullrequest.tmpl',
 
 function Template(location) {
     var location = path.resolve(process.cwd(), '.pullquester', location);
-    console.log('template: ' + location);
 
     this.get = function() {
         try {
