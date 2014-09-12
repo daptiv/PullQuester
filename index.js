@@ -28,7 +28,7 @@ function enumFilter() {
 
 program
     .option('-i, --id <id>', 'Id for the keyed template to use')
-    .version('0.3.0');
+    .version('0.4.0');
 
 program.command('install')
     .description('Install the dependencies of this tool')
@@ -44,6 +44,10 @@ program.command('init [id]')
     .action(function(id, options) {
         require('./src/commands/init')(id, options.source);
     });
+
+program.command('update')
+    .description('Make adjustments to fix breaking changes when upgrading versions of pullquester')
+    .action(require('./src/commands/update'));
 
 program.parse(process.argv);
 

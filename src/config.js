@@ -1,11 +1,11 @@
 'use strict';
 var fs = require('fs');
 var path = require('path');
-var configLocation = process.cwd() + '/pullrequest.json';
+var configLocation = process.cwd() + '/.pullquester' + '/pullrequest.json';
 
 
 function Configuration(location) {
-    var location = path.resolve(process.cwd(), location);
+    var location = path.resolve(process.cwd(), '.pullquester', location);
 
     this.get = function() {
         try {
