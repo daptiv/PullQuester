@@ -1,34 +1,54 @@
 'use strict';
-var temp = require('temp');
 var _ = require('lodash');
 var fs = require('fs');
 var templateLocation = process.cwd() + '/pullrequest.tmpl',
-defaultTemplateLocation = __dirname + '/pullrequest.tmpl';
+defaultTemplateLocation = __dirname + '/../pullrequest.tmpl';
 
 function createDefault (){
     var defaultTemplate = fs.readFileSync(defaultTemplateLocation);
-    return fs.writeFileSync(templateLocation,defaultTemplate);
+    return this.set(defaultTemplate);
 };
 
-function destroy() {
-    temp.cleanup();
+function createDefaultIfNotExists (){
+  try {
+      var template = this.get();
+      if (!template) {
+          this.createDefault();
+      }
+      return template;
+  } catch (error) {
+      return;
+  }
 }
 
 function compile(templateData) {
-    var compiledString = _.template(templateValue, templateData, {
+    var compiledString = _.template(this.get(), templateData, {
         variable: 'config'
     });
 
-    var file = temp.openSync();
-    fs.writeSync(file.fd, compiledString);
-
-    return file.path;
+    return compiledString;
 }
 
+function get () {
+    try {
+        return fs.readFileSync(templateLocation);
+    } catch (error) {
+        return;
+    }
+}
 
+function set (template) {
+    try {
+        return fs.writeFileSync(templateLocation,  template);
+    } catch (error) {
+        return;
+    }
+}
 
 module.exports = {
     createDefault: createDefault,
-    destroy: destroy
-
+    compile: compile,
+    createDefaultIfNotExists: createDefaultIfNotExists,
+    get: get,
+    set: set
 };

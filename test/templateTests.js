@@ -15,12 +15,18 @@ describe('template.js Tests', function() {
         this.sandbox.restore();
     });
 
+    it('should create a default template', function() {
+        template.createDefault();
+        var defaultTemplate  = template.get();
+
+        expect(defaultTemplate).to.not.be.undefined;
+    });
+
     it('should return a compiled template', function() {
-        var templateFile = '??';
+        var tempData = 'test';
+        var compiledResult  = template.compile(tempData);
 
-        var result = template.create(templateFilePath)
-
-        expect(result).to.equal();
+        expect(compiledResult).to.not.be.undefined;
     });
 
 });
