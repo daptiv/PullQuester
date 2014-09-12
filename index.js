@@ -22,15 +22,15 @@ program.command('install')
     .description('Install the dependencies of this tool')
     .action(require('./src/commands/install'));
 
-program.command('init')
+program.command('init [id]')
     .description('Initialize a repo to use this tool')
     .option(
         '-s --source <value>',
         'specify which type of source to get users from (org|collab|team)',
         enumFilter('org', 'collab', 'team'),
         'org')
-    .action(function(options) {
-        require('./src/commands/init')(options.source);
+    .action(function(id, options) {
+        require('./src/commands/init')(id, options.source);
     });
 
 program.parse(process.argv);

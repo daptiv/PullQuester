@@ -11,7 +11,7 @@ temp.track();
 var InquirerQuestionBuilder = require('../inquirerQuestionBuilder');
 
 var config = require('./../../config');
-var template = require('../template');
+var Template = require('../template');
 
 module.exports = function () {
     var gitBranchPromise = Q.nfcall(exec, 'git rev-parse --abbrev-ref HEAD').catch(function (error) {
@@ -23,7 +23,7 @@ module.exports = function () {
             var branchname = results[0].replace(/^\s+|\s+$/g, ''),
                 storyIdMatches = branchname.match(/^\d+/),
                 storyId = storyIdMatches ? storyIdMatches[0] : '',
-                templateValue = template.get(),
+                templateValue = Template.default,
                 configValue = config.get(),
                 builder = new InquirerQuestionBuilder();
 
@@ -68,9 +68,9 @@ module.exports = function () {
                 .then(function (answers) {
                     answers.branchname = branchname;
                     answers.buildTypeId = configValue.buildTypeId;
-                    var pullrequest = _.template(templateValue, answers, {
-                        variable: 'config'
-                    });
+                    var pullrequest = templateValue.compile(answers);
+                    console.log(templateValue);
+                    console.log(pullrequest);
 
 
                     var pullFile = temp.openSync();

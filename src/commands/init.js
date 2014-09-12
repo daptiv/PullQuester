@@ -4,7 +4,7 @@ var inquirer = require('../inquirerWrapper');
 var _ = require('lodash');
 var Q = require('q');
 var config = require('./../../config');
-var template = require('./template');
+var Template = require('../template');
 var exec =  require('child_process').exec;
 
 var github = require('../githubWrapper');
@@ -84,7 +84,7 @@ function getTeamMembers() {
         });
 }
 
-module.exports = function (source) {
+module.exports = function (id, source) {
 
     inquirer.prompt(InquirerQuestionBuilder.GithubAuth)
 
@@ -165,7 +165,7 @@ module.exports = function (source) {
                 }
                 config.set(configValue);
 
-                template.createDefaultIfNotExists();
+                Template.createDefaultIfNotExists();
             }
         })
 

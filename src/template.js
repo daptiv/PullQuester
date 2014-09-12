@@ -1,54 +1,56 @@
 'use strict';
 var _ = require('lodash');
 var fs = require('fs');
+var path = require('path');
 var templateLocation = process.cwd() + '/pullrequest.tmpl',
-defaultTemplateLocation = __dirname + '/pullrequest.tmpl';
+    defaultTemplateLocation = __dirname + '/pullrequest.tmpl';
 
-function createDefault (){
-    var defaultTemplate = fs.readFileSync(defaultTemplateLocation);
-    return this.set(defaultTemplate);
-};
+function Template(location) {
+    var location = path.resolve(process.cwd(), location);
 
-function createDefaultIfNotExists (){
-  try {
-      var template = this.get();
-      if (!template) {
-          this.createDefault();
-      }
-      return template;
-  } catch (error) {
-      return;
-  }
-}
+    this.get = function() {
+        try {
+            return fs.readFileSync(location);
+        } catch (error) {
+            return;
+        }
+    };
 
-function compile(templateData) {
-    var compiledString = _.template(this.get(), templateData, {
-        variable: 'config'
-    });
+    this.set = function(template) {
+        try {
+            return fs.writeFileSync(location,  template);
+        } catch (error) {
+            return;
+        }
+    };
 
-    return compiledString;
-}
+    this.compile = function(templateData) {
+        console.log(this.get());
+        console.log
+        var compiledString = _.template(this.get(), templateData, {
+            variable: 'config'
+        });
 
-function get () {
-    try {
-        return fs.readFileSync(templateLocation);
-    } catch (error) {
-        return;
+        return compiledString;
     }
 }
 
-function set (template) {
+Template.createDefaultIfNotExists = function() {
     try {
-        return fs.writeFileSync(templateLocation,  template);
+        var template = Template.default;
+        if (!template.get()) {
+            var defaultTemplate = fs.readFileSync(defaultTemplateLocation);
+            template.set(defaultTemplate);
+        }
     } catch (error) {
-        return;
+        return false;
     }
-}
 
-module.exports = {
-    createDefault: createDefault,
-    compile: compile,
-    createDefaultIfNotExists: createDefaultIfNotExists,
-    get: get,
-    set: set
+    return true;
 };
+
+Template.default = (function() {
+    return new Template(templateLocation);
+})();
+
+module.exports = Template;
