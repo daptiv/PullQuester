@@ -25,8 +25,6 @@ function Template(location) {
     };
 
     this.compile = function(templateData) {
-        console.log(this.get());
-        console.log
         var compiledString = _.template(this.get(), templateData, {
             variable: 'config'
         });
