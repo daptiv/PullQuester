@@ -1,7 +1,7 @@
 'use strict';
 var inquirer = require('../inquirerWrapper');
-var exec =  require('child_process').exec;
-var spawn =  require('child_process').spawn;
+var spawn =  require('cross-spawn');
+var exec = require('child_process').exec;
 var _ = require('lodash');
 var Q = require('q');
 var temp = require('temp');
@@ -79,11 +79,6 @@ module.exports = function (id) {
 
                     var pullFile = temp.openSync();
                     fs.writeSync(pullFile.fd, pullrequest);
-
-                    var request = 'hub pull-request -F ' + pullFile.path;
-                    console.log(request);
-                    var env = process.env;
-                    env.REQUEST = pullrequest;
 
                     process.on('exit', function() {
                         temp.cleanup();
