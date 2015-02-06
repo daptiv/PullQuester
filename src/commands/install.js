@@ -23,9 +23,9 @@ module.exports = function() {
                     'This install script is only supported on windows with ' +
                     'git bash.  If this fails please try again from git bash.');
 
-                script = 'install-hub.win.sh');
+                script = 'install-hub.win.sh';
             }
-            var installScript = path.resolve(__dirname + '/../../' + script)
+            var installScript = path.resolve(__dirname + '/../../' + script);
             console.log('Installing hub, this should take a couple minutes.');
             exec(installScript, function(err, sout, serr) {
                 if (err) {console.log('err: ' + err);}
