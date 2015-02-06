@@ -28,7 +28,7 @@ function enumFilter() {
 
 program
     .option('-i, --id <id>', 'Id for the keyed template to use')
-    .version('0.4.0');
+    .version('0.4.2');
 
 program.command('install')
     .description('Install the dependencies of this tool')
