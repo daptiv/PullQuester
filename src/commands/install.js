@@ -1,8 +1,9 @@
 'use strict';
 
-var exec =  require('child_process').exec;
+var exec = require('child_process').exec;
 var inquirer = require('../inquirerWrapper');
 var os = require('os');
+var path = require('path');
 
 module.exports = function() {
     exec('hub', function(error, stdout, stderr) {
@@ -16,15 +17,21 @@ module.exports = function() {
             (matches[1] && matches[1].length) ||
             (matches[2] && matches[2].length)) {
 
+            var script = 'install-hub.sh';
             if (os.platform() === 'win32') {
                 console.log(
                     'This install script is only supported on windows with ' +
                     'git bash.  If this fails please try again from git bash.');
 
-                exec(__dirname + '/../../install-hub.win.sh', function() { });
-            } else {
-                exec(__dirname + '/../../install-hub.sh', function() { });
+                script = 'install-hub.win.sh';
             }
+            var installScript = path.resolve(__dirname + '/../../' + script);
+            console.log('Installing hub, this should take a couple minutes.');
+            exec(installScript, function(err, sout, serr) {
+                if (err) {console.log('err: ' + err);}
+                if (serr) {console.log('err: ' + serr);}
+                console.log(sout);
+            });
         }
     });
 };
