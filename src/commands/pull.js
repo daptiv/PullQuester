@@ -75,8 +75,8 @@ module.exports = function (id) {
                 .then(function (answers) {
                     answers.branchname = branchname;
                     answers.buildTypeId = configValue.buildTypeId;
-                    var pullrequest = template.compile(answers).replace(/\r\n/, '\n');
-                    spawn('hub', ['pull-request', '-m', pullFile.path], { stdio: 'inherit' });
+                    var pullrequest = template.compile(answers).replace(/\r/, '');
+                    spawn('hub', ['pull-request', '-m', pullrequest], { stdio: 'inherit' });
                 });
 
         });
