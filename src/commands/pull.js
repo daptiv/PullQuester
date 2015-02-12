@@ -75,16 +75,8 @@ module.exports = function (id) {
                 .then(function (answers) {
                     answers.branchname = branchname;
                     answers.buildTypeId = configValue.buildTypeId;
-                    var pullrequest = template.compile(answers);
-
-                    var pullFile = temp.openSync();
-                    fs.writeSync(pullFile.fd, pullrequest);
-
-                    process.on('exit', function() {
-                        temp.cleanup();
-                    });
-
-                    spawn('hub', ['pull-request', '-F', pullFile.path], { stdio: 'inherit' });
+                    var pullrequest = template.compile(answers).replace(/\r/, '');
+                    spawn('hub', ['pull-request', '-m', pullrequest], { stdio: 'inherit' });
                 });
 
         });
