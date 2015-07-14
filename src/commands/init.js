@@ -159,8 +159,12 @@ module.exports = function (id, source) {
         // write out files
         .then(function (answers) {
             if (answers.confirmCreation) {
-                if (fs.exists('.pullquester')) {
+                try {
                     fs.mkdirSync('.pullquester');
+                } catch(err) {
+                    if (err.code !== 'EEXIST') {
+                        throw err;
+                    }
                 }
 
                 var configValue = config.get() || {};
