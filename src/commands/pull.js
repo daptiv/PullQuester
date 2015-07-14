@@ -34,7 +34,9 @@ module.exports = function (id) {
                 configValue = config.get(),
                 builder = new InquirerQuestionBuilder();
 
-            builder.withInputQuestion('title', 'Title:', branchname)
+            builder
+                .withInputQuestion('baseBranch', 'Base branch', 'master')
+                .withInputQuestion('title', 'Title:', branchname)
                 .withInputQuestion('storyId', 'StoryId:', storyId)
                 .withInputQuestion('description', 'Description of changes:', storyId);
 
@@ -84,7 +86,14 @@ module.exports = function (id) {
                         temp.cleanup();
                     });
 
-                    spawn('hub', ['pull-request', '-F', pullFile.path], { stdio: 'inherit' });
+                    spawn(
+                        'hub',
+                        [
+                            'pull-request',
+                            '-F', pullFile.path,
+                            '-b', answers.baseBranch
+                        ],
+                        { stdio: 'inherit' });
                 });
 
         });
