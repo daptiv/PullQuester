@@ -159,13 +159,11 @@ module.exports = function (id, source) {
         // write out files
         .then(function (answers) {
             if (answers.confirmCreation) {
-                try {
-                    fs.mkdirSync('.pullquester');
-                } catch(err) {
+                fs.mkdir('.pullquester', function (err) {
                     if (err.code !== 'EEXIST') {
                         throw err;
                     }
-                }
+                });
 
                 var configValue = config.get() || {};
 
