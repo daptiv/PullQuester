@@ -88,9 +88,7 @@ function getTeamMembers() {
 module.exports = function (id, source) {
     var config = Config.default;
     if (id) {
-        var configPath = Config.createPathFromId(id)
-        console.log(configPath);
-        config = new Config(configPath);
+        config = new Config(Config.createPathFromId(id));
     }
 
     inquirer.prompt(InquirerQuestionBuilder.GithubAuth)
