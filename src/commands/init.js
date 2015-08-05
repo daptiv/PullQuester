@@ -160,7 +160,7 @@ module.exports = function (id, source) {
         .then(function (answers) {
             if (answers.confirmCreation) {
                 fs.mkdir('.pullquester', function (err) {
-                    if (err.code !== 'EEXIST') {
+                    if (err && err.code !== 'EEXIST') {
                         throw err;
                     }
                 });
