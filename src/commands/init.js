@@ -161,7 +161,6 @@ module.exports = function (id, source) {
         // write out files
         .then(function (answers) {
             if (answers.confirmCreation) {
-                console.log('creating pullquester directory');
                 fs.mkdir('.pullquester', function (err) {
                     if (err && err.code !== 'EEXIST') {
                         throw err;
@@ -184,7 +183,6 @@ module.exports = function (id, source) {
                     template = new Template(Template.createPathFromId(id));
                 }
 
-                console.log('set config template');
                 template.set(Template.default.get());
             }
         })
