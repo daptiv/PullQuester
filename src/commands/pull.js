@@ -35,6 +35,7 @@ module.exports = function (id) {
                 builder = new InquirerQuestionBuilder();
 
             builder
+                .withInputQuestion('issue', 'Issue:', null)
                 .withInputQuestion('baseBranch', 'Base branch', 'master')
                 .withInputQuestion('title', 'Title:', branchname)
                 .withInputQuestion('storyId', 'StoryId:', storyId)
@@ -86,14 +87,18 @@ module.exports = function (id) {
                         temp.cleanup();
                     });
 
-                    spawn(
-                        'hub',
-                        [
-                            'pull-request',
-                            '-F', pullFile.path,
-                            '-b', answers.baseBranch
-                        ],
-                        { stdio: 'inherit' });
+                    var args = [
+                        'pull-request',
+                        '-b', answers.baseBranch
+                    ];
+                    if (answers.issue) {
+                        args.push('-i');
+                        args.push(answers.issue);
+                    } else {
+                        args.push('-F');
+                        args.push(pullFile.path);
+                    }
+                    spawn('hub', args, { stdio: 'inherit' });
                 });
 
         });
