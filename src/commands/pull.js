@@ -1,7 +1,7 @@
 'use strict';
 var inquirer = require('../inquirerWrapper');
 var spawn =  require('cross-spawn');
-var exec = require('child_process').exec;
+var exec = require('child_process').execSync;
 var _ = require('lodash');
 var Q = require('q');
 var temp = require('temp');
@@ -14,12 +14,8 @@ var Config = require('../config');
 var Template = require('../template');
 
 module.exports = function (id) {
-    var gitBranchPromise = Q.nfcall(exec, 'git rev-parse --abbrev-ref HEAD').catch(function (error) {
-        console.log('This is not a git repo or there was an error getting the branch name', error);
-    });
-
-    Q.all(gitBranchPromise)
-        .then(function (results) {
+            var refOut = exec('git rev-parse --abbrev-ref HEAD').toString();
+            var issuesOut = exec('hub issue').toString();
             var template = Template.default;
             var config = Config.default;
 
@@ -28,14 +24,15 @@ module.exports = function (id) {
                 config = new Config(Config.createPathFromId(id));
             }
 
-            var branchname = results[0].replace(/^\s+|\s+$/g, ''),
+            var issues = _.filter(issuesOut.split('\n').sort(), function(issue) { return issue && issue.trim().length > 0; });
+            var branchname = refOut.replace(/^\s+|\s+$/g, ''),
                 storyIdMatches = branchname.match(/^\d+/),
                 storyId = storyIdMatches ? storyIdMatches[0] : '',
                 configValue = config.get(),
                 builder = new InquirerQuestionBuilder();
 
             builder
-                .withInputQuestion('issue', 'Issue:', null)
+                .withListQuestion('issues', 'Selected any related issues:', issues)
                 .withInputQuestion('baseBranch', 'Base branch', 'master')
                 .withInputQuestion('title', 'Title:', branchname)
                 .withInputQuestion('storyId', 'StoryId:', storyId)
@@ -89,17 +86,14 @@ module.exports = function (id) {
 
                     var args = [
                         'pull-request',
-                        '-b', answers.baseBranch
+                        '-b', answers.baseBranch,
+                        '-F', pullFile.path
                     ];
-                    if (answers.issue) {
-                        args.push('-i');
-                        args.push(answers.issue);
-                    } else {
-                        args.push('-F');
-                        args.push(pullFile.path);
-                    }
+
                     spawn('hub', args, { stdio: 'inherit' });
                 });
-
-        });
+        //
+        // }).catch(function (error) {
+        //     console.log('Something bad happened', error);
+        // });
 };

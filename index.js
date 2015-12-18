@@ -1,6 +1,10 @@
 'use strict';
 var program = require('commander');
 var _ = require('lodash');
+var version = require('./package.json').version;
+var installAction = require('./src/commands/install');
+var updateAction = require('./src/commands/update');
+var pullAction = require('./src/commands/pull');
 
 function noCommandRan() {
     var noCommandRan = true;
@@ -28,11 +32,11 @@ function enumFilter() {
 
 program
     .option('-i, --id <id>', 'Id for the keyed template to use')
-    .version('0.5.0');
+    .version(version);
 
 program.command('install')
     .description('Install the dependencies of this tool')
-    .action(require('./src/commands/install'));
+    .action(installAction);
 
 program.command('init [id]')
     .description('Initialize a repo to use this tool')
@@ -47,10 +51,10 @@ program.command('init [id]')
 
 program.command('update')
     .description('Make adjustments to fix breaking changes when upgrading versions of pullquester')
-    .action(require('./src/commands/update'));
+    .action(updateAction);
 
 program.parse(process.argv);
 
 if (noCommandRan()) {
-    require('./src/commands/pull')(program.id || program.args[0]);
+    pullAction(program.id || program.args[0]);
 }
