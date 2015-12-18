@@ -1,7 +1,7 @@
 'use strict';
 var inquirer = require('../inquirerWrapper');
 var spawn =  require('cross-spawn');
-var exec = require('child_process').execSync;
+var exec = require('child_process').exec;
 var _ = require('lodash');
 var Q = require('q');
 var temp = require('temp');
@@ -14,8 +14,31 @@ var Config = require('../config');
 var Template = require('../template');
 
 module.exports = function (id) {
-            var refOut = exec('git rev-parse --abbrev-ref HEAD').toString();
-            var issuesOut = exec('hub issue').toString();
+
+    var gitBranchPromise = Q.nfcall(exec, 'git rev-parse --abbrev-ref HEAD').catch(function (error) {
+        console.log('This is not a git repo or there was an error getting the branch name', error);
+    });
+
+    var gitIssuesPromise = Q.nfcall(exec, 'hub issue').catch(function (error) {
+        console.log('This is not a git repo or there was an error getting the issues', error);
+    });
+    Q.all([gitBranchPromise, gitIssuesPromise])
+        .then(function (results) {
+            var issuesAndPullRequests = _.filter(_.map(results[1][0].split('\n').sort(), function(i) {
+                return i.trim().replace(/(\d+)]([^\(]+)/, '#$1 [$2]');
+            }), function(item) {
+                return item.length > 0;
+            });
+            var issues = _.filter(issuesAndPullRequests, function(item) { return item.indexOf('/issues/') >= 0; });
+            var pullRequests = _.filter(issuesAndPullRequests, function(item) { return item.indexOf('/pull/') >= 0; });
+            var seperator = new inquirer.Separator();
+            var allChoices = issues.concat([seperator]).concat(pullRequests);
+            return {
+                branch: results[0][0].replace(/^\s+|\s+$/g, ''),
+                issues: allChoices
+            };
+        })
+        .then(function(data) {
             var template = Template.default;
             var config = Config.default;
 
@@ -24,15 +47,15 @@ module.exports = function (id) {
                 config = new Config(Config.createPathFromId(id));
             }
 
-            var issues = _.filter(issuesOut.split('\n').sort(), function(issue) { return issue && issue.trim().length > 0; });
-            var branchname = refOut.replace(/^\s+|\s+$/g, ''),
+            var branchname = data.branch,
+                issues = data.issues,
                 storyIdMatches = branchname.match(/^\d+/),
                 storyId = storyIdMatches ? storyIdMatches[0] : '',
                 configValue = config.get(),
                 builder = new InquirerQuestionBuilder();
 
             builder
-                .withListQuestion('issues', 'Selected any related issues:', issues)
+                .withCheckboxQuestion('issues', 'Related issue(s):', issues)
                 .withInputQuestion('baseBranch', 'Base branch', 'master')
                 .withInputQuestion('title', 'Title:', branchname)
                 .withInputQuestion('storyId', 'StoryId:', storyId)
@@ -71,13 +94,14 @@ module.exports = function (id) {
                 builder.withUserDefinedQuestions(questions);
             }
 
-            inquirer.prompt(builder.build())
+            inquirer.promisedPrompt(builder.build())
                 .then(function (answers) {
                     answers.branchname = branchname;
                     answers.buildTypeId = configValue.buildTypeId;
-                    var pullrequest = template.compile(answers);
 
+                    var pullrequest = template.compile(answers);
                     var pullFile = temp.openSync();
+
                     fs.writeSync(pullFile.fd, pullrequest);
 
                     process.on('exit', function() {
@@ -92,8 +116,8 @@ module.exports = function (id) {
 
                     spawn('hub', args, { stdio: 'inherit' });
                 });
-        //
-        // }).catch(function (error) {
-        //     console.log('Something bad happened', error);
-        // });
+
+        }).catch(function (error) {
+            console.log('Something bad happened', error);
+        });
 };

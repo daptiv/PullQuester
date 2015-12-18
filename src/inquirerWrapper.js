@@ -10,7 +10,6 @@ function prompt(questions) {
 
     return deferred.promise;
 }
+inquirer.promisedPrompt = prompt;
 
-module.exports = {
-    prompt: prompt
-};
+module.exports = inquirer;
