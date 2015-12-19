@@ -12,14 +12,26 @@ var InquirerQuestionBuilder = require('../inquirerQuestionBuilder');
 
 var Config = require('../config');
 var Template = require('../template');
+var parseHubIssues = require('../parseHubIssues');
 
 module.exports = function (id) {
+
     var gitBranchPromise = Q.nfcall(exec, 'git rev-parse --abbrev-ref HEAD').catch(function (error) {
         console.log('This is not a git repo or there was an error getting the branch name', error);
     });
 
-    Q.all(gitBranchPromise)
+    var gitIssuesPromise = Q.nfcall(exec, 'hub issue').catch(function (error) {
+        console.log('This is not a git repo or there was an error getting the issues', error);
+    });
+
+    Q.all([gitBranchPromise, gitIssuesPromise])
         .then(function (results) {
+            return {
+                branch: results[0][0].replace(/^\s+|\s+$/g, ''),
+                issues: parseHubIssues(results[1][0])
+            };
+        })
+        .then(function(data) {
             var template = Template.default;
             var config = Config.default;
 
@@ -28,14 +40,15 @@ module.exports = function (id) {
                 config = new Config(Config.createPathFromId(id));
             }
 
-            var branchname = results[0].replace(/^\s+|\s+$/g, ''),
+            var branchname = data.branch,
+                issues = data.issues,
                 storyIdMatches = branchname.match(/^\d+/),
                 storyId = storyIdMatches ? storyIdMatches[0] : '',
                 configValue = config.get(),
                 builder = new InquirerQuestionBuilder();
 
             builder
-                .withInputQuestion('issue', 'Issue:', null)
+                .withCheckboxQuestion('issues', 'Related issue(s):', issues)
                 .withInputQuestion('baseBranch', 'Base branch', 'master')
                 .withInputQuestion('title', 'Title:', branchname)
                 .withInputQuestion('storyId', 'StoryId:', storyId)
@@ -53,7 +66,6 @@ module.exports = function (id) {
             if (configValue.developers) {
                 builder.withCheckboxQuestion('reviewers', 'Select reviewers:', _.sortBy(configValue.developers, 'name'));
             }
-
 
             if (configValue.testers) {
                 builder.withCheckboxQuestion('testers', 'Select testers:', _.sortBy(configValue.testers, 'name'));
@@ -78,9 +90,10 @@ module.exports = function (id) {
                 .then(function (answers) {
                     answers.branchname = branchname;
                     answers.buildTypeId = configValue.buildTypeId;
-                    var pullrequest = template.compile(answers);
 
+                    var pullrequest = template.compile(answers);
                     var pullFile = temp.openSync();
+
                     fs.writeSync(pullFile.fd, pullrequest);
 
                     process.on('exit', function() {
@@ -89,17 +102,14 @@ module.exports = function (id) {
 
                     var args = [
                         'pull-request',
-                        '-b', answers.baseBranch
+                        '-b', answers.baseBranch,
+                        '-F', pullFile.path
                     ];
-                    if (answers.issue) {
-                        args.push('-i');
-                        args.push(answers.issue);
-                    } else {
-                        args.push('-F');
-                        args.push(pullFile.path);
-                    }
+
                     spawn('hub', args, { stdio: 'inherit' });
                 });
 
+        }).catch(function (error) {
+            console.log('Something bad happened', error);
         });
 };
