@@ -86,7 +86,7 @@ module.exports = function (id) {
                 builder.withUserDefinedQuestions(questions);
             }
 
-            inquirer.promisedPrompt(builder.build())
+            inquirer.prompt(builder.build())
                 .then(function (answers) {
                     answers.branchname = branchname;
                     answers.buildTypeId = configValue.buildTypeId;
