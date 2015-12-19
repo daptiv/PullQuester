@@ -12,6 +12,7 @@ var InquirerQuestionBuilder = require('../inquirerQuestionBuilder');
 
 var Config = require('../config');
 var Template = require('../template');
+var parseHubIssues = require('../parseHubIssues');
 
 module.exports = function (id) {
 
@@ -22,20 +23,12 @@ module.exports = function (id) {
     var gitIssuesPromise = Q.nfcall(exec, 'hub issue').catch(function (error) {
         console.log('This is not a git repo or there was an error getting the issues', error);
     });
+
     Q.all([gitBranchPromise, gitIssuesPromise])
         .then(function (results) {
-            var issuesAndPullRequests = _.filter(_.map(results[1][0].split('\n').sort(), function(i) {
-                return i.trim().replace(/(\d+)]([^\(]+)/, '#$1 [$2]');
-            }), function(item) {
-                return item.length > 0;
-            });
-            var issues = _.filter(issuesAndPullRequests, function(item) { return item.indexOf('/issues/') >= 0; });
-            var pullRequests = _.filter(issuesAndPullRequests, function(item) { return item.indexOf('/pull/') >= 0; });
-            var seperator = new inquirer.Separator();
-            var allChoices = issues.concat([seperator]).concat(pullRequests);
             return {
                 branch: results[0][0].replace(/^\s+|\s+$/g, ''),
-                issues: allChoices
+                issues: parseHubIssues(results[1][0])
             };
         })
         .then(function(data) {
@@ -73,7 +66,6 @@ module.exports = function (id) {
             if (configValue.developers) {
                 builder.withCheckboxQuestion('reviewers', 'Select reviewers:', _.sortBy(configValue.developers, 'name'));
             }
-
 
             if (configValue.testers) {
                 builder.withCheckboxQuestion('testers', 'Select testers:', _.sortBy(configValue.testers, 'name'));
