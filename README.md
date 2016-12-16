@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/daptiv/PullQuester.svg?branch=travis)](https://travis-ci.org/daptiv/PullQuester)
 PullQuester
 ===========
 
@@ -12,7 +13,8 @@ Install hub via instructions in readme https://github.com/github/hub
 npm install -g pullquester
 ```
 
-Ensure that hub is installed and you have provided credentials to it. Hub will ask for credentials the first time it needs them.  http://hub.github.com
+Ensure that hub is installed and you have provided credentials to it. Hub will
+ask for credentials the first time it needs them.  http://hub.github.com
 
 In order to get hub to ask you for credentials run the following
 
@@ -24,7 +26,8 @@ hub pull-request
 Configuration
 =============
 
-Move to root directory of the repo you wish to add the pull request configuration to and run
+Move to root directory of the repo you wish to add the pull request configuration
+to and run
 
 ```
 pull --init
@@ -32,7 +35,8 @@ pull --init
 
 Follow the prompts to initialize the tool
 
-Custom questions can be added by adding Inquirer question configs to the pullrequest.json config file.
+Custom questions can be added by adding Inquirer question configs to the
+pullrequest.json config file.
 
 https://github.com/SBoudrias/Inquirer.js
 
@@ -41,5 +45,5 @@ answers are added to the config in the template.
 Usage
 =====
 
-Ensure your branch is pushed, and you are currently in the branch you want pulled.
-Then just run `pull` and follow the promps
+Ensure your branch is pushed, and you are currently in the branch you want
+pulled. Then just run `pull` and follow the promps.
