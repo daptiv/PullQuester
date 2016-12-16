@@ -1,21 +1,20 @@
 'use strict';
-var inquirer = require('../inquirerWrapper');
-var spawn =  require('cross-spawn');
-var exec = require('child_process').exec;
-var _ = require('lodash');
-var Q = require('q');
-var temp = require('temp');
-var fs = require('fs');
+
+const inquirer = require('../inquirerWrapper'),
+    spawn =  require('cross-spawn'),
+    exec = require('child_process').exec,
+    _ = require('lodash'),
+    Q = require('q'),
+    temp = require('temp'),
+    fs = require('fs'),
+    InquirerQuestionBuilder = require('../inquirerQuestionBuilder'),
+    Config = require('../config'),
+    Template = require('../template'),
+    parseHubIssues = require('../parseHubIssues');
+
 temp.track();
 
-var InquirerQuestionBuilder = require('../inquirerQuestionBuilder');
-
-var Config = require('../config');
-var Template = require('../template');
-var parseHubIssues = require('../parseHubIssues');
-
 module.exports = function (id) {
-
     var gitBranchPromise = Q.nfcall(exec, 'git rev-parse --abbrev-ref HEAD').catch(function (error) {
         console.log('This is not a git repo or there was an error getting the branch name', error);
     });

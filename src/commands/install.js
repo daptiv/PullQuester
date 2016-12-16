@@ -1,9 +1,8 @@
 'use strict';
 
-var exec = require('child_process').exec;
-var inquirer = require('../inquirerWrapper');
-var os = require('os');
-var path = require('path');
+const { exec } = require('child_process'),
+    os = require('os'),
+    path = require('path');
 
 module.exports = function() {
     exec('hub', function(error, stdout, stderr) {
@@ -25,6 +24,7 @@ module.exports = function() {
 
                 script = 'install-hub.win.sh';
             }
+
             var installScript = path.resolve(__dirname + '/../../' + script);
             console.log('Installing hub, this should take a couple minutes.');
             exec(installScript, function(err, sout, serr) {

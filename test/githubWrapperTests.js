@@ -1,16 +1,12 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var expect = chai.expect;
-
-var GitHubApi = require('github');
-var gitHubWrapper = require('../src/githubWrapper');
+const sinon   = require('sinon'),
+    { expect } = require('chai'),
+    { describe, beforeEach, afterEach, it } = require('mocha'),
+    gitHubWrapper = require('../src/githubWrapper');
 
 describe('githubwrapper.js Tests', function() {
 
     beforeEach(function() {
         this.sandbox = sinon.sandbox.create();
-
-        //this.gitHubStub = this.sandbox.stub(GitHubApi, 'prompt');
     });
 
     afterEach(function() {
@@ -68,5 +64,4 @@ describe('githubwrapper.js Tests', function() {
 
         expect(result).to.have.property('then');
     });
-
 });

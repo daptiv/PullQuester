@@ -1,31 +1,29 @@
 'use strict';
 
-var inquirer = require('../inquirerWrapper');
-var _ = require('lodash');
-var Q = require('q');
-var Config = require('../config');
-var Template = require('../template');
-var exec =  require('child_process').exec;
-var fs = require('fs');
-
-var github = require('../githubWrapper');
-var InquirerQuestionBuilder = require('../inquirerQuestionBuilder');
-
-var GITHUB_REMOTE_REGEXP = /github\.com:([^\/]+)\/([^\/]+) \(fetch\)$/;
+const inquirer = require('../inquirerWrapper'),
+    _ = require('lodash'),
+    Q = require('q'),
+    Config = require('../config'),
+    Template = require('../template'),
+    exec =  require('child_process').exec,
+    fs = require('fs'),
+    github = require('../githubWrapper'),
+    InquirerQuestionBuilder = require('../inquirerQuestionBuilder'),
+    GITHUB_REMOTE_REGEXP = /github\.com:([^\/]+)\/([^\/]+) \(fetch\)$/;
 
 function getCollaborators() {
     var deferred = Q.defer();
 
-    exec('git remote -v', function(error, stdout, stderr) {
+    exec('git remote -v', function(error, stdout) {
         var remotes = stdout.toString().split('\n');
 
         inquirer
             .prompt([{
-                    name: 'remote',
-                    type: 'list',
-                    message: 'Choose a remote to get collaborators for',
-                    choices: _.filter(remotes, function(remote) { return GITHUB_REMOTE_REGEXP.test(remote); })
-                }])
+                name: 'remote',
+                type: 'list',
+                message: 'Choose a remote to get collaborators for',
+                choices: _.filter(remotes, function(remote) { return GITHUB_REMOTE_REGEXP.test(remote); })
+            }])
             .then(function(answers) {
                 answers.remote.match(GITHUB_REMOTE_REGEXP);
 
@@ -126,7 +124,7 @@ module.exports = function (id, source) {
                             }
                         };
                     });
-                }));
+            }));
         })
 
         // have user choose subsets of returned users to include as testers and/or developers
