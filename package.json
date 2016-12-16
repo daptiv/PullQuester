@@ -1,8 +1,11 @@
 {
   "name": "pullquester",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Issues a pull request using configuration files in your current repo.",
-  "author": "Jonathan Park <jpark@daptiv.com>",
+  "author": "Jonathan Park <jpark@daptiv.com>, Sam Noedel <sam.noedel@gmail.com>",
+  "scripts": {
+    "test": "mocha"
+  },
   "keywords": [
     "github",
     "manager",
@@ -11,19 +14,17 @@
   ],
   "license": "BSD-2-Clause",
   "dependencies": {
+    "commander": "~2.1.0",
+    "cross-spawn": "~0.2.3",
+    "github": "~0.1.12",
     "inquirer": "~0.4.1",
     "lodash": "~2.4.1",
-    "github": "~0.1.12",
     "q": "~1.0.0",
-    "commander": "~2.1.0",
-    "temp": "~0.6.0",
-    "cross-spawn": "~0.2.3"
+    "temp": "~0.6.0"
   },
   "devDependencies": {
-    "grunt": "~0.4.5",
-    "mocha": "~1.21.4",
-    "grunt-simple-mocha": "~0.4.0",
     "chai": "1.9.1",
+    "mocha": "~1.21.4",
     "sinon": "1.10.3"
   },
   "repository": {
