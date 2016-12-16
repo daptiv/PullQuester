@@ -12,6 +12,10 @@
     "pull",
     "request"
   ],
+  "engines": {
+      "node": ">=4.7.0"
+  },
+  "preferGlobal": true,
   "license": "BSD-2-Clause",
   "dependencies": {
     "commander": "~2.1.0",
