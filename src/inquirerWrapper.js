@@ -1,5 +1,5 @@
-var Q = require('q'),
-  inquirer = require('inquirer');
+const  Q = require('q'),
+    inquirer = require('inquirer');
 
 function prompt(questions) {
     var deferred = Q.defer();

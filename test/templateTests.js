@@ -1,12 +1,9 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var expect = chai.expect;
-
-
-var Template = require('../src/template');
+const sinon = require('sinon'),
+    { expect } = require('chai'),
+    { describe, beforeEach, afterEach, it } = require('mocha'),
+    Template = require('../src/template');
 
 describe('template.js Tests', function() {
-
     beforeEach(function() {
         this.sandbox = sinon.sandbox.create();
     });
@@ -21,5 +18,4 @@ describe('template.js Tests', function() {
 
         expect(compiledResult).to.not.be.undefined;
     });
-
 });

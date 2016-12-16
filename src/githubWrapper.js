@@ -1,7 +1,6 @@
-var Q = require('q'),
+const Q = require('q'),
     GitHubApi = require('github'),
     github = new GitHubApi({
-        // required
         version: '3.0.0'
     });
 
@@ -18,7 +17,7 @@ function authenticate(username, password) {
 
     deferred.resolve();
 
-    return deferred.promise
+    return deferred.promise;
 }
 
 function getOrganizations() {
@@ -48,7 +47,7 @@ function getTeamMembers(teamId) {
         id: teamId
     };
 
-    return Q.ninvoke(github.orgs, 'getTeamMembers', options)
+    return Q.ninvoke(github.orgs, 'getTeamMembers', options);
 }
 
 function getMembers(organization) {

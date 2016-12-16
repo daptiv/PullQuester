@@ -1,11 +1,9 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var expect = chai.expect;
-var parseHubIssues = require('../src/parseHubIssues');
-var inquirer = require('inquirer');
+const inquirer         = require('inquirer'),
+    { describe, it } = require('mocha'),
+    { expect }       = require('chai'),
+    parseHubIssues   = require('../src/parseHubIssues');
 
 describe('parseHubIssues', function() {
-
     it('should start with Issues: separator', function() {
         var hubIssues = '\n    10] latest issue ( https://github.com/daptiv/PullQuester/issues/10 )';
         var issuesSeparator = new inquirer.Separator('Issues:');
@@ -38,7 +36,7 @@ describe('parseHubIssues', function() {
     });
 
     it('should order issues numerically ascending then pull requests numerically ascending', function() {
-        var hubIssues = '\n'
+        var hubIssues = '\n';
         hubIssues += '    10] latest issue ( https://github.com/daptiv/PullQuester/issues/10 )\n';
         hubIssues += '    8] another pull ( https://github.com/daptiv/PullQuester/pull/8 )\n';
         hubIssues += '    3] fake issue ( https://github.com/daptiv/PullQuester/issues/3 )\n';

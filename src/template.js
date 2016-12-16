@@ -1,12 +1,13 @@
 'use strict';
-var _ = require('lodash');
-var fs = require('fs');
-var path = require('path');
-var templateLocation = process.cwd() + '/.pullquester' + '/pullrequest.tmpl',
+
+const _ = require('lodash'),
+    fs = require('fs'),
+    path = require('path'),
+    templateLocation = process.cwd() + '/.pullquester' + '/pullrequest.tmpl',
     defaultTemplateLocation = __dirname + '/pullrequest.tmpl';
 
 function Template(location) {
-    var location = path.resolve(process.cwd(), '.pullquester', location);
+    location = path.resolve(process.cwd(), '.pullquester', location);
 
     this.get = function() {
         try {
@@ -30,7 +31,7 @@ function Template(location) {
         });
 
         return compiledString;
-    }
+    };
 }
 
 Template.createDefaultIfNotExists = function() {

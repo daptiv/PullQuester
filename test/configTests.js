@@ -1,12 +1,9 @@
-var chai = require('chai');
-var sinon = require('sinon');
-var expect = chai.expect;
-
-
-var Config = require('../src/config');
+const sinon = require('sinon'),
+    { expect } = require('chai'),
+    { describe, beforeEach, afterEach, it } = require('mocha'),
+    Config = require('../src/config');
 
 describe('config.js Tests', function() {
-
     beforeEach(function() {
         this.sandbox = sinon.sandbox.create();
     });
@@ -19,11 +16,10 @@ describe('config.js Tests', function() {
         var Id = 'test';
         var path  = Config.createPathFromId(Id);
 
-        expect(path).to.equal("pullrequest." + Id + ".json");
+        expect(path).to.equal('pullrequest.' + Id + '.json');
     });
 
     it('should return the default path', function() {
-        var Id = 'test';
         var config  = Config.default;
 
         expect(config).to.not.be.undefined;

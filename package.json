@@ -1,9 +1,10 @@
 {
   "name": "pullquester",
-  "version": "0.8.1",
+  "version": "1.0.0",
   "description": "Issues a pull request using configuration files in your current repo.",
   "author": "Jonathan Park <jpark@daptiv.com>, Sam Noedel <sam.noedel@gmail.com>",
   "scripts": {
+    "pretest": "eslint src/ test",
     "test": "mocha"
   },
   "keywords": [
@@ -13,7 +14,7 @@
     "request"
   ],
   "engines": {
-    "node": ">=4.7.0"
+    "node": ">=6.9.1"
   },
   "preferGlobal": true,
   "license": "BSD-2-Clause",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "eslint": "^3.12.2",
     "mocha": "^3.2.0",
     "sinon": "^1.17.6"
   },
