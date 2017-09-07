@@ -4,7 +4,7 @@ const fs = require('fs');
 
 function upgrade_from_0_3_0_to_0_4_0() {
     if (fs.existsSync('./.pullquester/')) {
-      return;
+        return;
     }
 
     console.log('applying update from v0.3.0 to v0.4.0');
