@@ -3,57 +3,57 @@
 const _ = require('lodash'),
     fs = require('fs'),
     path = require('path'),
-    templateLocation = path.resolve(process.cwd(), '.pullquester', 'pullrequest.tmpl'),
-    defaultTemplateLocation = path.resolve(__dirname , '..', 'pullrequest.tmpl');
+    templateLocation = process.cwd() + '/.pullquester' + '/pullrequest.tmpl',
+    defaultTemplateLocation = __dirname + '/pullrequest.tmpl';
 
-class Template {
-    constructor(location) {
-        this.location = path.resolve(process.cwd(), '.pullquester', location);
-    }
+function Template(location) {
+    location = path.resolve(process.cwd(), '.pullquester', location);
 
-    get() {
+    this.get = function() {
         try {
-            return fs.readFileSync(this.location);
+            return fs.readFileSync(location);
         } catch (error) {
             return;
         }
-    }
+    };
 
-    set(template) {
+    this.set = function(template) {
         try {
-            return fs.writeFileSync(this.location,  template);
+            return fs.writeFileSync(location,  template);
         } catch (error) {
             return;
         }
-    }
+    };
 
-    compile(templateData) {
-        const compiledString = _.template(this.get(), templateData, {
+    this.compile = function(templateData) {
+        var compiledString = _.template(this.get(), templateData, {
             variable: 'config'
         });
+
         return compiledString;
-    }
-
-    static createDefaultIfNotExists() {
-        try {
-            let template = Template.default;
-            if (!template.get()) {
-                let defaultTemplate = fs.readFileSync(defaultTemplateLocation);
-                template.set(defaultTemplate);
-            }
-        } catch (error) {
-            return false;
-        }
-        return true;
-    }
-
-    static get default() {
-        return new Template(templateLocation);
-    }
-
-    static createPathFromId(id) {
-        return 'pullrequest.' + id + '.tmpl';
-    }
+    };
 }
+
+Template.createDefaultIfNotExists = function() {
+    try {
+        var template = Template.default;
+        if (!template.get()) {
+            var defaultTemplate = fs.readFileSync(defaultTemplateLocation);
+            template.set(defaultTemplate);
+        }
+    } catch (error) {
+        return false;
+    }
+
+    return true;
+};
+
+Template.default = (function() {
+    return new Template(templateLocation);
+})();
+
+Template.createPathFromId = function(id) {
+    return 'pullrequest.' + id + '.tmpl';
+};
 
 module.exports = Template;

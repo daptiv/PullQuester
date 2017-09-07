@@ -8,6 +8,7 @@ function upgrade_from_0_3_0_to_0_4_0() {
     }
 
     console.log('applying update from v0.3.0 to v0.4.0');
+
     fs.mkdirSync('.pullquester');
     fs.renameSync('pullrequest.json', '.pullquester/pullrequest.json');
     fs.renameSync('pullrequest.tmpl', '.pullquester/pullrequest.tmpl');
@@ -37,5 +38,5 @@ module.exports = function() {
     console.log('applying updates...');
     upgrade_from_0_3_0_to_0_4_0();
     upgrade_from_0_7_0_to_0_8_0();
-    console.log('finished applying updates.');
+    console.log('finished!');
 };
