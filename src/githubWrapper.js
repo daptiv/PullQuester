@@ -49,7 +49,7 @@ function getTeams(organization) {
     return github.orgs.getTeams(options)
         .then(teams => {
             return teams.data;
-        })
+        });
 }
 
 function getTeamMembers(teamId) {
