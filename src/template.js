@@ -1,10 +1,10 @@
 'use strict';
 
-const _ = require('lodash'),
+var _ = require('lodash'),
     fs = require('fs'),
     path = require('path'),
-    templateLocation = process.cwd() + '/.pullquester' + '/pullrequest.tmpl',
-    defaultTemplateLocation = __dirname + '/pullrequest.tmpl';
+    templateLocation = path.resolve(process.cwd(), '.pullquester', 'pullrequest.tmpl'),
+    defaultTemplateLocation = path.resolve(__dirname , '..', 'pullrequest.tmpl');
 
 function Template(location) {
     location = path.resolve(process.cwd(), '.pullquester', location);
