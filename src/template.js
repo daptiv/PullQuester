@@ -13,7 +13,7 @@ class Template {
 
     get() {
         try {
-            return fs.readFileSync(location);
+            return fs.readFileSync(this.location);
         } catch (error) {
             return;
         }
@@ -21,7 +21,7 @@ class Template {
 
     set(template) {
         try {
-            return fs.writeFileSync(location,  template);
+            return fs.writeFileSync(this.location,  template);
         } catch (error) {
             return;
         }
@@ -36,9 +36,9 @@ class Template {
 
     static createDefaultIfNotExists() {
         try {
-            var template = Template.default;
+            let template = Template.default;
             if (!template.get()) {
-                var defaultTemplate = fs.readFileSync(defaultTemplateLocation);
+                let defaultTemplate = fs.readFileSync(defaultTemplateLocation);
                 template.set(defaultTemplate);
             }
         } catch (error) {
