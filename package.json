@@ -23,6 +23,7 @@
     "cross-spawn": "^5.0.1",
     "github": "^7.0.1",
     "inquirer": "^2.0.0",
+    "is-installed-globally": "^0.1.0",
     "lodash": "^4.17.2",
     "q": "^1.4.1",
     "temp": "^0.8.3"
