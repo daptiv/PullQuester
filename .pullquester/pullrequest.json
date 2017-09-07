@@ -1,38 +1,22 @@
 {
     "developers": [
         {
-            "name": "chrisbobo",
-            "value": "@chrisbobo"
+            "name": "Darrel Anderson",
+            "value": "@dizard2001"
         },
         {
-            "name": "jacobboland",
-            "value": "@jacobboland"
-        },
-        {
-            "name": "park9140",
-            "value": "@park9140"
-        },
-        {
-            "name": "akalman",
-            "value": "@akalman"
+            "name": "James Trinklein",
+            "value": "@jtrinklein"
         }
     ],
     "testers": [
         {
-            "name": "chrisbobo",
-            "value": "@chrisbobo"
+            "name": "Darrel Anderson",
+            "value": "@dizard2001"
         },
         {
-            "name": "jacobboland",
-            "value": "@jacobboland"
-        },
-        {
-            "name": "park9140",
-            "value": "@park9140"
-        },
-        {
-            "name": "akalman",
-            "value": "@akalman"
+            "name": "James Trinklein",
+            "value": "@jtrinklein"
         }
     ],
     "requirements": [
