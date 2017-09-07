@@ -26,11 +26,9 @@ function Template(location) {
     };
 
     this.compile = function(templateData) {
-        var compiledString = _.template(this.get(), templateData, {
-            variable: 'config'
-        });
+        var compiledString = _.template(this.get());
 
-        return compiledString;
+        return compiledString(templateData);
     };
 }
 
