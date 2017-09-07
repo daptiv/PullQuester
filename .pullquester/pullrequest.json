@@ -41,9 +41,12 @@
             "value": "Add documentation for this thing"
         }
     ],
-    "questions": [{
-        "name": "questionsAsked",
-        "type": "confirm",
-        "message": "Did this custom question get added?"
-    }]
+    "questions": [
+        {
+            "name": "questionsAsked",
+            "type": "confirm",
+            "message": "Did this custom question get added?"
+        }
+    ],
+    "revision": 2
 }
