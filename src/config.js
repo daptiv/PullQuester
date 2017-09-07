@@ -18,6 +18,7 @@ function Configuration(location) {
 
     this.set = function(config) {
         try {
+            config = Object.assign({}, config, {revision: 2});
             return fs.writeFileSync(location,  JSON.stringify(config, null, 4));
         } catch (error) {
             return;
