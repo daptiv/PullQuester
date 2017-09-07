@@ -5,13 +5,6 @@ var version = require('./package.json').version;
 var installAction = require('./src/commands/install');
 var updateAction = require('./src/commands/update');
 var pullAction = require('./src/commands/pull');
-var isGlobal = require('is-installed-globally');
-
-if (!isGlobal) {
-    console.warn('Local install detected!');
-    console.warn('PullQuester is intended to be installed globally.');
-    console.warn('Please reinstall with `npm install -g pullquester` to install globally.');
-}
 
 function noCommandRan() {
     var noCommandRan = true;
