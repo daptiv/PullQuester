@@ -25,6 +25,11 @@ module.exports = function (id) {
 
     Q.all([gitBranchPromise, gitIssuesPromise])
         .then(function (results) {
+
+            if (results[0] === undefined || results[1] === undefined) {
+                throw new Error('Problem getting get information');
+            }
+
             return {
                 branch: results[0][0].replace(/^\s+|\s+$/g, ''),
                 issues: parseHubIssues(results[1][0])
@@ -34,7 +39,7 @@ module.exports = function (id) {
             var template = Template.default;
             var config = Config.default;
 
-            if (id) {
+            if (id && id !== 'pull') {
                 template = new Template(Template.createPathFromId(id));
                 config = new Config(Config.createPathFromId(id));
             }
@@ -54,7 +59,13 @@ module.exports = function (id) {
                 .withInputQuestion('description', 'Description of changes:', storyId);
 
             if (!configValue) {
-                console.log('Error: Pull not initialized pull --init to build one for your repository');
+                let errorMsg = 'Error: Pull not initialized';
+                if (id) {
+                    errorMsg += ' for id `' + id + '`';
+                }
+                errorMsg += '.';
+
+                console.log(errorMsg + ' Run `pull init` to build one for your repository');
                 return;
             }
 
