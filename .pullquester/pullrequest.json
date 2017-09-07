@@ -1,22 +1,22 @@
 {
     "developers": [
         {
-            "name": "James Trinklein",
-            "value": "@jtrinklein"
-        },
-        {
             "name": "Darrel Anderson",
             "value": "@dizard2001"
+        },
+        {
+            "name": "James Trinklein",
+            "value": "@jtrinklein"
         }
     ],
     "testers": [
         {
-            "name": "James Trinklein",
-            "value": "@jtrinklein"
-        },
-        {
             "name": "Darrel Anderson",
             "value": "@dizard2001"
+        },
+        {
+            "name": "James Trinklein",
+            "value": "@jtrinklein"
         }
     ],
     "requirements": [
@@ -25,9 +25,12 @@
             "value": "Add documentation for this thing"
         }
     ],
-    "questions": [{
-        "name": "questionsAsked",
-        "type": "confirm",
-        "message": "Did this custom question get added?"
-    }]
+    "questions": [
+        {
+            "name": "questionsAsked",
+            "type": "confirm",
+            "message": "Did this custom question get added?"
+        }
+    ],
+    "revision": 2
 }

@@ -41,8 +41,7 @@ function getCollaborators() {
 function getOrganizationMembers() {
     return github.getOrganizations()
         .then(function(orgs) {
-            var orgsToDisplay = _.pluck(orgs, 'login');
-
+            var orgsToDisplay = orgs.map(o => o.login);
             return inquirer.prompt(
                 new InquirerQuestionBuilder()
                     .withListQuestion('org', 'Choose the org you wish to view', orgsToDisplay)
@@ -58,7 +57,7 @@ function getTeamMembers() {
 
     return github.getOrganizations()
         .then(function(orgs) {
-            var orgsToDisplay = _.pluck(orgs, 'login');
+            var orgsToDisplay = orgs.map(o => o.login);
 
             return inquirer.prompt(
                 new InquirerQuestionBuilder()
@@ -131,10 +130,10 @@ module.exports = function (id, source) {
         .then(function (githubMembers) {
             var configValue = config.get() || {},
                 currentTesters = _.map(configValue.testers, function (item) {
-                    return _.find(_.pluck(githubMembers, 'value'), {value: item.value});
+                    return _.find(_.pick(githubMembers, 'value'), {value: item.value});
                 }),
                 currentDevelopers = _.map(configValue.developers, function (item) {
-                    return _.find(_.pluck(githubMembers, 'value'), {value: item.value});
+                    return _.find(_.pick(githubMembers, 'value'), {value: item.value});
                 });
 
             githubMembers = _.sortBy(githubMembers, 'name');
@@ -174,8 +173,6 @@ module.exports = function (id, source) {
                 }
                 config.set(configValue);
 
-                Template.createDefaultIfNotExists();
-
                 var template = Template.default;
                 if (id) {
                     template = new Template(Template.createPathFromId(id));
@@ -188,6 +185,5 @@ module.exports = function (id, source) {
         // print any error
         .catch(function (err) {
             console.log(err);
-        })
-        .done();
+        });
 };

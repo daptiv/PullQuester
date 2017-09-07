@@ -1,6 +1,6 @@
 {
   "name": "pullquester",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Issues a pull request using configuration files in your current repo.",
   "author": "Jonathan Park <jpark@daptiv.com>, Sam Noedel <sam.noedel@gmail.com>",
   "scripts": {
@@ -19,13 +19,13 @@
   "preferGlobal": true,
   "license": "BSD-2-Clause",
   "dependencies": {
-    "commander": "^2.9.0",
-    "cross-spawn": "^5.0.1",
-    "github": "^7.0.1",
-    "inquirer": "^2.0.0",
-    "is-installed-globally": "^0.1.0",
+    "commander": "2.11.0",
+    "cross-spawn": "^5.1.0",
+    "github": "11.0.0",
+    "inquirer": "3.2.3",
     "lodash": "^4.17.2",
-    "q": "^1.4.1",
+    "mute-stream": "0.0.7",
+    "q": "^1.5.0",
     "temp": "^0.8.3"
   },
   "devDependencies": {
