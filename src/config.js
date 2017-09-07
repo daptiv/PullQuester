@@ -2,35 +2,37 @@
 
 const fs = require('fs'),
     path = require('path'),
-    configLocation = process.cwd() + '/.pullquester' + '/pullrequest.json';
+    configLocation = path.resolve(process.cwd(), '.pullquester', 'pullrequest.json');
 
+class Configuration {
+    constructor(location) {
+        this.location = path.resolve(process.cwd(), '.pullquester', location);
+    }
 
-function Configuration(location) {
-    location = path.resolve(process.cwd(), '.pullquester', location);
-
-    this.get = function() {
+    get() {
         try {
-            return require(location);
+            return require(this.location);
         } catch (error) {
             return;
         }
-    };
+    }
 
-    this.set = function(config) {
+    set(config) {
         try {
-            return fs.writeFileSync(location,  JSON.stringify(config, null, 4));
+            config = Object.assign({}, config, {revision: 2});
+            return fs.writeFileSync(this.location,  JSON.stringify(config, null, 4));
         } catch (error) {
             return;
         }
-    };
+    }
+
+    static get default() {
+        return new Configuration(configLocation);
+    }
+
+    static createPathFromId(id) {
+        return 'pullrequest.' + id + '.json';
+    }
 }
-
-Configuration.default = (function() {
-    return new Configuration(configLocation);
-})();
-
-Configuration.createPathFromId = function(id) {
-    return 'pullrequest.' + id + '.json';
-};
 
 module.exports = Configuration;

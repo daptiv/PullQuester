@@ -174,6 +174,8 @@ module.exports = function (id, source) {
                 }
                 config.set(configValue);
 
+                Template.createDefaultIfNotExists();
+
                 var template = Template.default;
                 if (id) {
                     template = new Template(Template.createPathFromId(id));
