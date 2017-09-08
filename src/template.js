@@ -3,7 +3,7 @@
 const _ = require('lodash'),
     fs = require('fs'),
     path = require('path'),
-    templateLocation = process.cwd() + '/.pullquester' + '/pullrequest.tmpl',
+    templateLocation = path.resolve(process.cwd(), '.pullquester', 'pullrequest.tmpl'),
     defaultTemplateLocation = path.resolve(__dirname, '..', 'pullrequest.tmpl');
 
 function Template(location) {
