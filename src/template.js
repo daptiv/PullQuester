@@ -28,7 +28,7 @@ function Template(location) {
     this.compile = function(templateData) {
         var compiledString = _.template(this.get());
 
-        return compiledString(templateData);
+        return compiledString({config: templateData});
     };
 }
 
