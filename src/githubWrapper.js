@@ -1,7 +1,8 @@
 const Q = require('q'),
     GitHubApi = require('github'),
     github = new GitHubApi({
-        version: '3.0.0'
+        debug: false,
+        Promise: Q.Promise
     });
 
 function authenticate(username, password) {
@@ -21,17 +22,23 @@ function authenticate(username, password) {
 }
 
 function getOrganizations() {
-    return Q.ninvoke(github.user, 'getOrgs', {});
+    return github.users.getOrgs({})
+        .then(orgs => {
+            return orgs.data;
+        });
 }
 
 function getCollaborators(user, repository) {
     var options = {
-        user: user,
+        owner: user,
         repo: repository,
         per_page: 100
     };
 
-    return Q.ninvoke(github.repos, 'getCollaborators', options);
+    return github.repos.getCollaborators(options)
+        .then(collaborators => {
+            return collaborators.data;
+        });
 }
 
 function getTeams(organization) {
@@ -39,7 +46,10 @@ function getTeams(organization) {
         org: organization
     };
 
-    return Q.ninvoke(github.orgs, 'getTeams', options);
+    return github.orgs.getTeams(options)
+        .then(teams => {
+            return teams.data;
+        });
 }
 
 function getTeamMembers(teamId) {
@@ -47,7 +57,10 @@ function getTeamMembers(teamId) {
         id: teamId
     };
 
-    return Q.ninvoke(github.orgs, 'getTeamMembers', options);
+    return github.orgs.getTeamMembers(options)
+        .then(members => {
+            return members.data;
+        });
 }
 
 function getMembers(organization) {
@@ -56,15 +69,21 @@ function getMembers(organization) {
         per_page: 100
     };
 
-    return Q.ninvoke(github.orgs, 'getMembers', options);
+    return github.orgs.getMembers(options)
+        .then(members => {
+            return members.data;
+        });
 }
 
 function getUser(username) {
     var options = {
-        user: username
+        username: username
     };
 
-    return Q.ninvoke(github.user, 'getFrom', options);
+    return github.users.getForUser(options)
+        .then(user => {
+            return user.data;
+        });
 }
 
 module.exports = {
