@@ -28,17 +28,17 @@ function getRemoteRepo() {
                     resolve({
                         owner: RegExp.$1,
                         repo: RegExp.$2
-                    })
-                })
-        })
-    })
+                    });
+                });
+        });
+    });
 }
 
 function getDefaultBranch(repo) {
     return github.getRepo(repo)
         .then((response) => {
-            return response.data.default_branch
-        })
+            return response.data.default_branch;
+        });
 }
 
 function getOrganizationMembers() {
@@ -87,7 +87,7 @@ function getTeamMembers() {
 
 module.exports = function (id, source) {
     let repo,
-        defaultBaseBranch
+        defaultBaseBranch;
 
     var config = Config.default;
     if (id) {
@@ -101,15 +101,16 @@ module.exports = function (id, source) {
             return github.authenticate(answers.username, answers.password);
         })
 
+        // prompt for remote repo and then get the default branch
         .then(getRemoteRepo)
         .then(repository => {
-            repo = repository
-            return getDefaultBranch(repo)
+            repo = repository;
+            return getDefaultBranch(repo);
         })
 
         // either get the collaborators for the repo, or get the members for the organization
         .then(function(defaultBranch) {
-            defaultBaseBranch = defaultBranch
+            defaultBaseBranch = defaultBranch;
             var usersPromise;
 
             if (source === 'collab') {
@@ -177,7 +178,7 @@ module.exports = function (id, source) {
 
                 var configValue = config.get() || {};
 
-                configValue.defaultBaseBranch = defaultBaseBranch
+                configValue.defaultBaseBranch = defaultBaseBranch;
                 configValue.developers = answers.developers;
                 if (answers.testers.length > 0) {
                     configValue.testers = answers.testers;
