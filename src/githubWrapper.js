@@ -93,5 +93,6 @@ module.exports = {
     getTeams: getTeams,
     getTeamMembers: getTeamMembers,
     getMembers: getMembers,
-    getUser: getUser
+    getUser: getUser,
+    getRepo: github.repos.get
 };

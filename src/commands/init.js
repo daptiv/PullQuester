@@ -9,33 +9,36 @@ const inquirer = require('../inquirerWrapper'),
     fs = require('fs'),
     github = require('../githubWrapper'),
     InquirerQuestionBuilder = require('../inquirerQuestionBuilder'),
-    GITHUB_REMOTE_REGEXP = /github\.com:([^\/]+)\/([^\/]+) \(fetch\)$/;
+    GITHUB_REMOTE_REGEXP = /github\.com:([^\/]+)\/([^\/]+?)(\.git)? \(fetch\)$/;
 
-function getCollaborators() {
-    var deferred = Q.defer();
+function getRemoteRepo() {
+    return new Promise(resolve => {
+        exec('git remote -v', function (error, stdout) {
+            var remotes = stdout.toString().split('\n');
 
-    exec('git remote -v', function(error, stdout) {
-        var remotes = stdout.toString().split('\n');
+            inquirer
+                .prompt([{
+                    name: 'remote',
+                    type: 'list',
+                    message: 'Choose a remote',
+                    choices: _.filter(remotes, function (remote) { return GITHUB_REMOTE_REGEXP.test(remote); })
+                }])
+                .then(function (answers) {
+                    answers.remote.match(GITHUB_REMOTE_REGEXP);
+                    resolve({
+                        owner: RegExp.$1,
+                        repo: RegExp.$2
+                    })
+                })
+        })
+    })
+}
 
-        inquirer
-            .prompt([{
-                name: 'remote',
-                type: 'list',
-                message: 'Choose a remote to get collaborators for',
-                choices: _.filter(remotes, function(remote) { return GITHUB_REMOTE_REGEXP.test(remote); })
-            }])
-            .then(function(answers) {
-                answers.remote.match(GITHUB_REMOTE_REGEXP);
-
-                github
-                    .getCollaborators(RegExp.$1, RegExp.$2)
-                    .then(function(users) {
-                        deferred.resolve(users);
-                    });
-            });
-    });
-
-    return deferred.promise;
+function getDefaultBranch(repo) {
+    return github.getRepo(repo)
+        .then((response) => {
+            return response.data.default_branch
+        })
 }
 
 function getOrganizationMembers() {
@@ -83,6 +86,9 @@ function getTeamMembers() {
 }
 
 module.exports = function (id, source) {
+    let repo,
+        defaultBaseBranch
+
     var config = Config.default;
     if (id) {
         config = new Config(Config.createPathFromId(id));
@@ -95,12 +101,19 @@ module.exports = function (id, source) {
             return github.authenticate(answers.username, answers.password);
         })
 
+        .then(getRemoteRepo)
+        .then(repository => {
+            repo = repository
+            return getDefaultBranch(repo)
+        })
+
         // either get the collaborators for the repo, or get the members for the organization
-        .then(function() {
+        .then(function(defaultBranch) {
+            defaultBaseBranch = defaultBranch
             var usersPromise;
 
             if (source === 'collab') {
-                usersPromise = getCollaborators();
+                usersPromise = github.getCollaborators(repo);
             } else if (source == 'team') {
                 usersPromise = getTeamMembers();
             } else {
@@ -164,6 +177,7 @@ module.exports = function (id, source) {
 
                 var configValue = config.get() || {};
 
+                configValue.defaultBaseBranch = defaultBaseBranch
                 configValue.developers = answers.developers;
                 if (answers.testers.length > 0) {
                     configValue.testers = answers.testers;
