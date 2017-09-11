@@ -16,7 +16,7 @@ function authenticate() {
                 username: answers.username,
                 password: answers.password
             });
-        })
+        });
 }
 
 function getRemoteRepo() {
@@ -50,7 +50,7 @@ function getDefaultBranch(repo) {
 }
 
 function getRepoInfo() {
-    let repoInfo
+    let repoInfo;
     return authenticate()
         .then(getRemoteRepo)
         .then(repository => {
@@ -60,7 +60,7 @@ function getRepoInfo() {
         .then(defaultBranch => {
             repoInfo.defaultBranch = defaultBranch;
             return repoInfo;
-        })
+        });
 }
 
 function getOrganizations() {

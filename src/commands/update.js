@@ -50,7 +50,7 @@ function upgrade_from_1_2_1_to_1_3_0(id) {
 
     return github.getRepoInfo()
         .then(repoInfo => {
-            configValue.defaultBaseBranch = repoInfo.defaultBranch
+            configValue.defaultBaseBranch = repoInfo.defaultBranch;
             configValue.revision = 3;
             config.set(configValue);
         });
