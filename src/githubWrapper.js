@@ -1,24 +1,66 @@
-const Q = require('q'),
-    GitHubApi = require('github'),
+const GitHubApi = require('github'),
     github = new GitHubApi({
-        debug: false,
-        Promise: Q.Promise
+        debug: false
+    }),
+    _ = require('lodash'),
+    exec =  require('child_process').exec,
+    inquirer = require('./inquirerWrapper'),
+    InquirerQuestionBuilder = require('./inquirerQuestionBuilder'),
+    GITHUB_REMOTE_REGEXP = /github\.com:([^\/]+)\/([^\/]+?)(\.git)? \(fetch\)$/;
+
+function authenticate() {
+    return inquirer.prompt(InquirerQuestionBuilder.GithubAuth)
+        .then(answers => {
+            return github.authenticate({
+                type: 'basic',
+                username: answers.username,
+                password: answers.password
+            });
+        });
+}
+
+function getRemoteRepo() {
+    return new Promise(resolve => {
+        exec('git remote -v', function (error, stdout) {
+            var remotes = stdout.toString().split('\n');
+
+            inquirer
+                .prompt([{
+                    name: 'remote',
+                    type: 'list',
+                    message: 'Choose a remote',
+                    choices: _.filter(remotes, function (remote) { return GITHUB_REMOTE_REGEXP.test(remote); })
+                }])
+                .then(function (answers) {
+                    answers.remote.match(GITHUB_REMOTE_REGEXP);
+                    resolve({
+                        owner: RegExp.$1,
+                        repo: RegExp.$2
+                    });
+                });
+        });
     });
+}
 
-function authenticate(username, password) {
-    var deferred = Q.defer();
+function getDefaultBranch(repo) {
+    return github.repos.get(repo)
+        .then((response) => {
+            return response.data.default_branch;
+        });
+}
 
-    var options = {
-        type: 'basic',
-        username: username,
-        password: password
-    };
-
-    github.authenticate(options);
-
-    deferred.resolve();
-
-    return deferred.promise;
+function getRepoInfo() {
+    let repoInfo;
+    return authenticate()
+        .then(getRemoteRepo)
+        .then(repository => {
+            repoInfo = repository;
+            return getDefaultBranch(repoInfo);
+        })
+        .then(defaultBranch => {
+            repoInfo.defaultBranch = defaultBranch;
+            return repoInfo;
+        });
 }
 
 function getOrganizations() {
@@ -93,5 +135,6 @@ module.exports = {
     getTeams: getTeams,
     getTeamMembers: getTeamMembers,
     getMembers: getMembers,
-    getUser: getUser
+    getUser: getUser,
+    getRepoInfo: getRepoInfo
 };

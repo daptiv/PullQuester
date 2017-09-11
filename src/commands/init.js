@@ -1,42 +1,14 @@
 'use strict';
 
+const CONFIG_REVISION = 3;
+
 const inquirer = require('../inquirerWrapper'),
     _ = require('lodash'),
-    Q = require('q'),
     Config = require('../config'),
     Template = require('../template'),
-    exec =  require('child_process').exec,
     fs = require('fs'),
     github = require('../githubWrapper'),
-    InquirerQuestionBuilder = require('../inquirerQuestionBuilder'),
-    GITHUB_REMOTE_REGEXP = /github\.com:([^\/]+)\/([^\/]+) \(fetch\)$/;
-
-function getCollaborators() {
-    var deferred = Q.defer();
-
-    exec('git remote -v', function(error, stdout) {
-        var remotes = stdout.toString().split('\n');
-
-        inquirer
-            .prompt([{
-                name: 'remote',
-                type: 'list',
-                message: 'Choose a remote to get collaborators for',
-                choices: _.filter(remotes, function(remote) { return GITHUB_REMOTE_REGEXP.test(remote); })
-            }])
-            .then(function(answers) {
-                answers.remote.match(GITHUB_REMOTE_REGEXP);
-
-                github
-                    .getCollaborators(RegExp.$1, RegExp.$2)
-                    .then(function(users) {
-                        deferred.resolve(users);
-                    });
-            });
-    });
-
-    return deferred.promise;
-}
+    InquirerQuestionBuilder = require('../inquirerQuestionBuilder');
 
 function getOrganizationMembers() {
     return github.getOrganizations()
@@ -83,24 +55,21 @@ function getTeamMembers() {
 }
 
 module.exports = function (id, source) {
+    let repoInfo;
+
     var config = Config.default;
     if (id) {
         config = new Config(Config.createPathFromId(id));
     }
 
-    inquirer.prompt(InquirerQuestionBuilder.GithubAuth)
-
-        // authenticate github api
-        .then(function (answers) {
-            return github.authenticate(answers.username, answers.password);
-        })
-
+    github.getRepoInfo()
         // either get the collaborators for the repo, or get the members for the organization
-        .then(function() {
+        .then(function(repoInformation) {
+            repoInfo = repoInformation;
             var usersPromise;
 
             if (source === 'collab') {
-                usersPromise = getCollaborators();
+                usersPromise = github.getCollaborators(repoInfo);
             } else if (source == 'team') {
                 usersPromise = getTeamMembers();
             } else {
@@ -112,7 +81,7 @@ module.exports = function (id, source) {
 
         // fetch user data for each user
         .then(function(users) {
-            return Q.all(_.map(users, function (user) {
+            return Promise.all(_.map(users, function (user) {
                 return github.getUser(user.login)
                     .then(function(user) {
                         return {
@@ -164,6 +133,8 @@ module.exports = function (id, source) {
 
                 var configValue = config.get() || {};
 
+                configValue.revision = CONFIG_REVISION;
+                configValue.defaultBaseBranch = repoInfo.defaultBranch;
                 configValue.developers = answers.developers;
                 if (answers.testers.length > 0) {
                     configValue.testers = answers.testers;

@@ -51,13 +51,6 @@ module.exports = function (id) {
                 configValue = config.get(),
                 builder = new InquirerQuestionBuilder();
 
-            builder
-                .withCheckboxQuestion('issues', 'Related issue(s):', issues)
-                .withInputQuestion('baseBranch', 'Base branch', 'master')
-                .withInputQuestion('title', 'Title:', branchname)
-                .withInputQuestion('storyId', 'StoryId:', storyId)
-                .withInputQuestion('description', 'Description of changes:', storyId);
-
             if (!configValue) {
                 let errorMsg = 'Error: Pull not initialized';
                 if (id) {
@@ -68,6 +61,13 @@ module.exports = function (id) {
                 console.log(errorMsg + ' Run `pull init` to build one for your repository');
                 return;
             }
+
+            builder
+                .withCheckboxQuestion('issues', 'Related issue(s):', issues)
+                .withInputQuestion('baseBranch', 'Base branch', configValue.defaultBaseBranch || 'master')
+                .withInputQuestion('title', 'Title:', branchname)
+                .withInputQuestion('storyId', 'StoryId:', storyId)
+                .withInputQuestion('description', 'Description of changes:', storyId);
 
             if (configValue.requirements) {
                 builder.withCheckboxQuestion('additionalRequirements', 'Select additional requirements', configValue.requirements);

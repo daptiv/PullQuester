@@ -49,7 +49,7 @@ program.command('init [id]')
         require('./src/commands/init')(id, options.source);
     });
 
-program.command('update')
+program.command('update [id]')
     .description('Make adjustments to fix breaking changes when upgrading versions of pullquester')
     .action(updateAction);
 
