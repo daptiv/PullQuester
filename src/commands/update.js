@@ -1,6 +1,8 @@
 'use strict';
 
 const fs = require('fs');
+const Config = require('../config');
+const github = require('../githubWrapper');
 
 function upgrade_from_0_3_0_to_0_4_0() {
     if (fs.existsSync('./.pullquester/')) {
@@ -34,9 +36,32 @@ function upgrade_from_0_7_0_to_0_8_0() {
     fs.writeFileSync('./.pullquester/pullrequest.tmpl', template);
 }
 
-module.exports = function() {
+function upgrade_from_1_2_1_to_1_3_0(id) {
+    const config = id
+        ? new Config(Config.createPathFromId(id))
+        : Config.default;
+
+    const configValue = config.get();
+    if (configValue.revision && configValue.revision >= 3) {
+        return;
+    }
+
+    console.log('applying update from v1.2.1 to v1.3.0');
+
+    return github.getRepoInfo()
+        .then(repoInfo => {
+            configValue.defaultBaseBranch = repoInfo.defaultBranch
+            configValue.revision = 3;
+            config.set(configValue);
+        });
+}
+
+module.exports = function (id) {
     console.log('applying updates...');
     upgrade_from_0_3_0_to_0_4_0();
     upgrade_from_0_7_0_to_0_8_0();
-    console.log('finished!');
+    return upgrade_from_1_2_1_to_1_3_0(id)
+        .then(() => {
+            console.log('finished!');
+        });
 };

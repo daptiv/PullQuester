@@ -1,45 +1,14 @@
 'use strict';
 
+const CONFIG_REVISION = 3;
+
 const inquirer = require('../inquirerWrapper'),
     _ = require('lodash'),
-    Q = require('q'),
     Config = require('../config'),
     Template = require('../template'),
-    exec =  require('child_process').exec,
     fs = require('fs'),
     github = require('../githubWrapper'),
-    InquirerQuestionBuilder = require('../inquirerQuestionBuilder'),
-    GITHUB_REMOTE_REGEXP = /github\.com:([^\/]+)\/([^\/]+?)(\.git)? \(fetch\)$/;
-
-function getRemoteRepo() {
-    return new Promise(resolve => {
-        exec('git remote -v', function (error, stdout) {
-            var remotes = stdout.toString().split('\n');
-
-            inquirer
-                .prompt([{
-                    name: 'remote',
-                    type: 'list',
-                    message: 'Choose a remote',
-                    choices: _.filter(remotes, function (remote) { return GITHUB_REMOTE_REGEXP.test(remote); })
-                }])
-                .then(function (answers) {
-                    answers.remote.match(GITHUB_REMOTE_REGEXP);
-                    resolve({
-                        owner: RegExp.$1,
-                        repo: RegExp.$2
-                    });
-                });
-        });
-    });
-}
-
-function getDefaultBranch(repo) {
-    return github.getRepo(repo)
-        .then((response) => {
-            return response.data.default_branch;
-        });
-}
+    InquirerQuestionBuilder = require('../inquirerQuestionBuilder');
 
 function getOrganizationMembers() {
     return github.getOrganizations()
@@ -86,35 +55,21 @@ function getTeamMembers() {
 }
 
 module.exports = function (id, source) {
-    let repo,
-        defaultBaseBranch;
+    let repoInfo;
 
     var config = Config.default;
     if (id) {
         config = new Config(Config.createPathFromId(id));
     }
 
-    inquirer.prompt(InquirerQuestionBuilder.GithubAuth)
-
-        // authenticate github api
-        .then(function (answers) {
-            return github.authenticate(answers.username, answers.password);
-        })
-
-        // prompt for remote repo and then get the default branch
-        .then(getRemoteRepo)
-        .then(repository => {
-            repo = repository;
-            return getDefaultBranch(repo);
-        })
-
+    github.getRepoInfo()
         // either get the collaborators for the repo, or get the members for the organization
-        .then(function(defaultBranch) {
-            defaultBaseBranch = defaultBranch;
+        .then(function(repoInformation) {
+            repoInfo = repoInformation;
             var usersPromise;
 
             if (source === 'collab') {
-                usersPromise = github.getCollaborators(repo);
+                usersPromise = github.getCollaborators(repoInfo);
             } else if (source == 'team') {
                 usersPromise = getTeamMembers();
             } else {
@@ -126,7 +81,7 @@ module.exports = function (id, source) {
 
         // fetch user data for each user
         .then(function(users) {
-            return Q.all(_.map(users, function (user) {
+            return Promise.all(_.map(users, function (user) {
                 return github.getUser(user.login)
                     .then(function(user) {
                         return {
@@ -178,7 +133,8 @@ module.exports = function (id, source) {
 
                 var configValue = config.get() || {};
 
-                configValue.defaultBaseBranch = defaultBaseBranch;
+                configValue.revision = CONFIG_REVISION;
+                configValue.defaultBaseBranch = repoInfo.defaultBranch;
                 configValue.developers = answers.developers;
                 if (answers.testers.length > 0) {
                     configValue.testers = answers.testers;
