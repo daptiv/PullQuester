@@ -64,4 +64,33 @@ describe('githubwrapper.js Tests', function() {
 
         expect(result).to.have.property('then');
     });
+
+    describe('remote regex', function() {
+        const regexp = gitHubWrapper.GITHUB_REMOTE_REGEXP;
+        const user = 'someuser';
+        const repo = 'somerepo';
+        const sshFetch = `origin	git@github.com:${user}/${repo}.git (fetch)`;
+        const httpsFetch = `origin	https://github.com/${user}/${repo}.git (fetch)`;
+        const sshPush = `origin	git@github.com:${user}/${repo}.git (push)`;
+
+        it('should match fetch remote in ssh format', function() {
+            expect(regexp.test(sshFetch)).to.be.true;
+
+            const [, userCap, repoCap] = sshFetch.match(regexp);
+            expect(userCap).to.equal(user);
+            expect(repoCap).to.equal(repo);
+        });
+
+        it('should match fetch remote in https format', function () {
+            expect(regexp.test(httpsFetch)).to.be.true;
+
+            const [, userCap, repoCap] = httpsFetch.match(regexp);
+            expect(userCap).to.equal(user);
+            expect(repoCap).to.equal(repo);
+        });
+
+        it('should not match push remote', function () {
+            expect(regexp.test(sshPush)).to.be.false;
+        });
+    });
 });

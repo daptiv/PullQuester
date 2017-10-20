@@ -6,7 +6,7 @@ const GitHubApi = require('github'),
     exec =  require('child_process').exec,
     inquirer = require('./inquirerWrapper'),
     InquirerQuestionBuilder = require('./inquirerQuestionBuilder'),
-    GITHUB_REMOTE_REGEXP = /github\.com:([^\/]+)\/([^\/]+?)(\.git)? \(fetch\)$/;
+    GITHUB_REMOTE_REGEXP = /github\.com(?::|\/)([^\/]+)\/([^\/]+?)(?:\.git)? \(fetch\)$/;
 
 function authenticate() {
     return inquirer.prompt(InquirerQuestionBuilder.GithubAuth)
@@ -129,6 +129,7 @@ function getUser(username) {
 }
 
 module.exports = {
+    GITHUB_REMOTE_REGEXP,
     authenticate: authenticate,
     getOrganizations: getOrganizations,
     getCollaborators: getCollaborators,
