@@ -45,5 +45,44 @@ answers are added to the config in the template.
 Usage
 =====
 
+From command line, simply run `pull` or `pull [subcommand]`.
+
 Ensure your branch is pushed, and you are currently in the branch you want
 pulled. Then just run `pull` and follow the promps.
+
+Command Information
+=====================
+
+### `pull [team]` 
+
+Create a pull request for the current branch. Branch must not have any pending changes and must be pushed up to the remote.
+
+Arguments:
+
+- team (optional) - Identifier for team configuration to use instead of default configuration. May not contain spaces.
+
+Examples:
+
+- `pull` - Starts prompts to create a pull request for the current branch. Uses default configuration.
+- `pull myteam` - Starts prompts to create a pull request for the current branch using team configuration for `myteam` instead of default configuration.
+
+### `pull init [team]`
+
+Create or update pullquester configuration. A `team` may be specified to allow per-team configuration.
+
+Arguments:
+
+- team (optional) - Identifier used to create/update team configuration vs default configuration. May not contain spaces.
+
+Examples:
+
+- `pull init` - creates/updates default pullquester configuration for the current repository.
+- `pull init myteam` - creates/updates pullquester configuration for team `myteam`
+
+### `pull update`
+
+Updates the pullquester config files if required.
+
+### `pull install`
+
+Runs an installer script to install the `hub` command on your system.
