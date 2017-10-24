@@ -30,7 +30,7 @@ Move to root directory of the repo you wish to add the pull request configuratio
 to and run
 
 ```
-pull --init
+pull init
 ```
 
 Follow the prompts to initialize the tool
