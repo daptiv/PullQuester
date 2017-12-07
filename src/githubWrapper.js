@@ -8,14 +8,60 @@ const GitHubApi = require('github'),
     InquirerQuestionBuilder = require('./inquirerQuestionBuilder'),
     GITHUB_REMOTE_REGEXP = /github\.com(?::|\/)([^\/]+)\/([^\/]+?)(?:\.git)? \(fetch\)$/;
 
+let wrapper = {
+    ghApi: () => github,
+};
+
+const requires2FA = (result) => {
+    const isUnauthorized = result && result.code === 401;
+    if (!isUnauthorized) {
+        return false;
+    }
+    const otpHeader = result.headers['x-github-otp'] || '';
+    const otpRequired = otpHeader.split(';').shift() === 'required';
+    return otpRequired;
+};
+
+const checkFor2faError = (error) => {
+    if (requires2FA(error)) {
+        const msg =
+            'ERROR: Your account requires Two Factor Authorization.\n' +
+            '       Currently PullQuester is unable to support 2FA.\n' +
+            '       Instead you may authenticate using an API token.\n' +
+            '       When prompted for username enter: <token>\n' +
+            '       and when prompted for password, enter your API token.\n' +
+            '       Tokens require at least org:read scope.';
+
+
+        console.error(msg);
+    }
+
+    throw error;
+};
+
+const basicAuth = (username, password) => {
+    return wrapper.ghApi().authenticate({
+        type: 'basic',
+        username,
+        password,
+    });
+};
+
+const tokenAuth = (token) => {
+    return wrapper.ghApi().authenticate({
+        type: 'token',
+        token
+    });
+};
+
 function authenticate() {
     return inquirer.prompt(InquirerQuestionBuilder.GithubAuth)
         .then(answers => {
-            return github.authenticate({
-                type: 'basic',
-                username: answers.username,
-                password: answers.password
-            });
+            if (answers.username === '<token>') {
+                return tokenAuth(answers.password);
+            } else {
+                return basicAuth(answers.username, answers.password);
+            }
         });
 }
 
@@ -43,7 +89,7 @@ function getRemoteRepo() {
 }
 
 function getDefaultBranch(repo) {
-    return github.repos.get(repo)
+    return wrapper.ghApi().repos.get(repo)
         .then((response) => {
             return response.data.default_branch;
         });
@@ -64,10 +110,10 @@ function getRepoInfo() {
 }
 
 function getOrganizations() {
-    return github.users.getOrgs({})
+    return wrapper.ghApi().users.getOrgs({})
         .then(orgs => {
             return orgs.data;
-        });
+        }, checkFor2faError);
 }
 
 function getCollaborators(user, repository) {
@@ -77,10 +123,10 @@ function getCollaborators(user, repository) {
         per_page: 100
     };
 
-    return github.repos.getCollaborators(options)
+    return wrapper.ghApi().repos.getCollaborators(options)
         .then(collaborators => {
             return collaborators.data;
-        });
+        }, checkFor2faError);
 }
 
 function getTeams(organization) {
@@ -88,10 +134,10 @@ function getTeams(organization) {
         org: organization
     };
 
-    return github.orgs.getTeams(options)
+    return wrapper.ghApi().orgs.getTeams(options)
         .then(teams => {
             return teams.data;
-        });
+        }, checkFor2faError);
 }
 
 function getTeamMembers(teamId) {
@@ -99,10 +145,10 @@ function getTeamMembers(teamId) {
         id: teamId
     };
 
-    return github.orgs.getTeamMembers(options)
+    return wrapper.ghApi().orgs.getTeamMembers(options)
         .then(members => {
             return members.data;
-        });
+        }, checkFor2faError);
 }
 
 function getMembers(organization) {
@@ -111,10 +157,10 @@ function getMembers(organization) {
         per_page: 100
     };
 
-    return github.orgs.getMembers(options)
+    return wrapper.ghApi().orgs.getMembers(options)
         .then(members => {
             return members.data;
-        });
+        }, checkFor2faError);
 }
 
 function getUser(username) {
@@ -122,20 +168,20 @@ function getUser(username) {
         username: username
     };
 
-    return github.users.getForUser(options)
+    return wrapper.ghApi().users.getForUser(options)
         .then(user => {
-            return user.data;
-        });
+            return user && user.data;
+        }, checkFor2faError);
 }
 
-module.exports = {
-    GITHUB_REMOTE_REGEXP,
-    authenticate: authenticate,
-    getOrganizations: getOrganizations,
-    getCollaborators: getCollaborators,
-    getTeams: getTeams,
-    getTeamMembers: getTeamMembers,
-    getMembers: getMembers,
-    getUser: getUser,
-    getRepoInfo: getRepoInfo
-};
+wrapper.GITHUB_REMOTE_REGEXP = GITHUB_REMOTE_REGEXP;
+wrapper.authenticate = authenticate;
+wrapper.getOrganizations = getOrganizations;
+wrapper.getCollaborators = getCollaborators;
+wrapper.getTeams = getTeams;
+wrapper.getTeamMembers = getTeamMembers;
+wrapper.getMembers = getMembers;
+wrapper.getUser = getUser;
+wrapper.getRepoInfo = getRepoInfo;
+
+module.exports = wrapper;
