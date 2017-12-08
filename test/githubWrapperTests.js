@@ -1,16 +1,35 @@
 const sinon   = require('sinon'),
     { expect } = require('chai'),
     { describe, beforeEach, afterEach, it } = require('mocha'),
+    inquirer = require('inquirer'),
     gitHubWrapper = require('../src/githubWrapper');
 
 describe('githubwrapper.js Tests', function() {
-
+    let mockGithub;
+    let sandbox;
     beforeEach(function() {
-        this.sandbox = sinon.sandbox.create();
+        sandbox = sinon.createSandbox();
+        mockGithub = {
+            authenticate: sandbox.stub().resolves(),
+            users: {
+                getForUser: sandbox.stub().resolves(),
+                getOrgs: sandbox.stub().resolves(),
+            },
+            orgs: {
+                getTeams: sandbox.stub().resolves(),
+                getTeamMembers: sandbox.stub().resolves(),
+                getMembers: sandbox.stub().resolves(),
+            },
+            repos: {
+                get: sandbox.stub().resolves(),
+                getCollaborators: sandbox.stub().resolves(),
+            },
+        };
+        sandbox.stub(gitHubWrapper, 'ghApi').returns(mockGithub);
     });
 
     afterEach(function() {
-        this.sandbox.restore();
+        sandbox.restore();
     });
 
     it('should return a promise from authenticate', function() {
@@ -60,9 +79,113 @@ describe('githubwrapper.js Tests', function() {
 
     it('should return a promise from getUser', function() {
         var username = 'testUser';
-        var result = gitHubWrapper.getUser(username);
+        var result = gitHubWrapper.getUser(username, {});
 
         expect(result).to.have.property('then');
+    });
+
+    it('authenticate should use token type auth when username is `<token>`', (done) => {
+        const password = 'thisisanapitoken';
+        sandbox.stub(inquirer, 'prompt').resolves({username: '<token>', password});
+        gitHubWrapper.authenticate().then(() => {
+            expect(mockGithub.authenticate.calledOnce).to.be.true;
+            expect(mockGithub.authenticate.args[0][0]).to.eql({type: 'token', token: password});
+            done();
+        })
+        .catch(e => {
+            done(e);
+        });
+    });
+
+    it('authenticate should use basic type auth when username is anything except `<token>`', (done) => {
+        const password = 'this is some password';
+        const username = 'not-token';
+        sandbox.stub(inquirer, 'prompt').resolves({username, password});
+        gitHubWrapper.authenticate().then(() => {
+
+            expect(mockGithub.authenticate.calledOnce).to.be.true;
+            expect(mockGithub.authenticate.args[0][0]).to.eql({type: 'basic', username, password});
+            done();
+        })
+        .catch(e => {
+            done(e);
+        });
+    });
+
+    describe('2FA checks', () => {
+        let errorSpy;
+        const otpError = {
+            code: 401,
+            headers: { ['x-github-otp']: 'required; app'}
+        };
+        const otherError = new Error('not a 2FA issue');
+
+        const otpReject = (spy) => {
+            spy.reset();
+            spy.rejects(otpError);
+        };
+        const otherReject = (spy) => {
+            spy.reset();
+            spy.rejects(otherError);
+        };
+
+        beforeEach(() => {
+            errorSpy = sandbox.stub(console, 'error');
+        });
+
+        [
+            ['getUser', mock => mock.users.getForUser],
+            ['getMembers', mock => mock.orgs.getMembers],
+            ['getTeamMembers', mock => mock.orgs.getTeamMembers],
+            ['getTeams', mock => mock.orgs.getTeams],
+            ['getCollaborators', mock => mock.repos.getCollaborators],
+            ['getOrganizations', mock => mock.users.getOrgs],
+            ['getDefaultBranch', mock => mock.repos.get],
+        ].forEach(([methodName, getApiSpy]) => {
+            it(`${methodName} should message on 2fa error`, (done) => {
+                otpReject(getApiSpy(mockGithub));
+
+                gitHubWrapper[methodName].call()
+                    .then(() => {}, () => {}) // catch any uncaught errors
+                    .then(() => {
+                        expect(errorSpy.calledOnce).to.be.true;
+                        done();
+                    });
+            });
+
+            it(`${methodName} should not message on non-2fa error`, (done) => {
+                otherReject(getApiSpy(mockGithub));
+                gitHubWrapper[methodName].call()
+                    .then(() => {}, () => {}) // catch any uncaught errors
+                    .then(() => {
+                        expect(errorSpy.called).to.be.false;
+                        done();
+                    });
+            });
+
+            it(`${methodName} should not resolve error state on 2fa error`, (done) => {
+                otpReject(getApiSpy(mockGithub));
+                gitHubWrapper[methodName].call()
+                    .then(() => {
+                        done(new Error('error state was resolved.'));
+                    }, (error) => {
+                        expect(error).to.eql(otpError);
+                        done();
+                    });
+            });
+
+            it(`${methodName} should not resolve error state on non-2fa error`, (done) => {
+                otherReject(getApiSpy(mockGithub));
+                gitHubWrapper[methodName].call()
+                    .then(() => {
+                        done(new Error('error state was resolved.'));
+                    }, (error) => {
+                        expect(error).to.eql(otherError);
+                        done();
+                    });
+            });
+        });
+
     });
 
     describe('remote regex', function() {

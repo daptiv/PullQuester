@@ -35,6 +35,8 @@ pull init
 
 Follow the prompts to initialize the tool
 
+**NOTE:** When providing credentials, if you have Two-Factor Auth enabled, authentication will fail. You may optionally provide the special username `<token>` which will change the auth type to `token`. This will expect your password to be a GitHub API token with at least `org:read` scope enabled.
+
 Custom questions can be added by adding Inquirer question configs to the
 pullrequest.json config file.
 
@@ -53,7 +55,7 @@ pulled. Then just run `pull` and follow the promps.
 Command Information
 =====================
 
-### `pull [team]` 
+### `pull [team]`
 
 Create a pull request for the current branch. Branch must not have any pending changes and must be pushed up to the remote.
 
