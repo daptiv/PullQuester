@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/daptiv/PullQuester.svg?branch=travis)](https://travis-ci.org/daptiv/PullQuester)
+[![Dependency Status](https://david-dm.org/daptiv/pullquester.svg)](https://david-dm.org/daptiv/pullquester)
+
 PullQuester
 ===========
 
