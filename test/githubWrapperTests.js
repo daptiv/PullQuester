@@ -140,6 +140,7 @@ describe('githubwrapper.js Tests', function() {
             ['getTeams', mock => mock.orgs.getTeams],
             ['getCollaborators', mock => mock.repos.getCollaborators],
             ['getOrganizations', mock => mock.users.getOrgs],
+            ['getDefaultBranch', mock => mock.repos.get],
         ].forEach(([methodName, getApiSpy]) => {
             it(`${methodName} should message on 2fa error`, (done) => {
                 otpReject(getApiSpy(mockGithub));

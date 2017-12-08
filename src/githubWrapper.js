@@ -92,7 +92,7 @@ function getDefaultBranch(repo) {
     return wrapper.ghApi().repos.get(repo)
         .then((response) => {
             return response.data.default_branch;
-        });
+        }, checkFor2faError);
 }
 
 function getRepoInfo() {
@@ -183,5 +183,6 @@ wrapper.getTeamMembers = getTeamMembers;
 wrapper.getMembers = getMembers;
 wrapper.getUser = getUser;
 wrapper.getRepoInfo = getRepoInfo;
+wrapper.getDefaultBranch = getDefaultBranch;
 
 module.exports = wrapper;
