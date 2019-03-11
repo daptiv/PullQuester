@@ -17,7 +17,7 @@
     "request"
   ],
   "engines": {
-    "node": ">=6.9.1"
+    "node": ">=8.x"
   },
   "preferGlobal": true,
   "license": "BSD-2-Clause",
