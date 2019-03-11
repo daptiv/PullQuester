@@ -64,7 +64,7 @@ function upgrade_from_1_4_0_to_1_5_0() {
 
     console.log('applying update from v1.4.0 to v1.5.0');
     var template = fs.readFileSync('./.pullquester/pullrequest.tmpl').toString();
-    template = template.replace('%> - [ ] <%- reviewer', '%><%- reviewer');
+    template = template.replace('%> - [ ] <%- reviewer', '%> - <%- reviewer');
 
     fs.writeFileSync('./.pullquester/pullrequest.tmpl', template);
     config.revision = 4;
