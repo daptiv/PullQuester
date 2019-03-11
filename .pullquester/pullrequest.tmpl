@@ -6,7 +6,7 @@ Code review:
 ------------
 
 <% } %>
-<% _.forEach(config.reviewers, function(reviewer) { %><%- reviewer %>
+<% _.forEach(config.reviewers, function(reviewer) { %> - <%- reviewer %>
 <% }); %>
 
 <% if (config.testers && config.testers.length > 0) { %>
