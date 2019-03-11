@@ -1,6 +1,6 @@
 {
   "name": "pullquester",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Issues a pull request using configuration files in your current repo.",
   "author": "Jonathan Park <https://github.com/park9140>, Sam Noedel <sam.noedel@gmail.com>, James Trinklein <https://github.com/jtrinklein>",
   "scripts": {
@@ -17,7 +17,7 @@
     "request"
   ],
   "engines": {
-    "node": ">=6.9.1"
+    "node": ">=8.x"
   },
   "preferGlobal": true,
   "license": "BSD-2-Clause",

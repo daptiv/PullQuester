@@ -112,6 +112,7 @@ module.exports = function (id) {
 
                     var args = [
                         'pull-request',
+                        '-r', answers.reviewers.map(r => r.replace('@', '')).join(','),
                         '-b', answers.baseBranch,
                         '-F', pullFile.path
                     ];
