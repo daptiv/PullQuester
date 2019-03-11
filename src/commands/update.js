@@ -43,7 +43,7 @@ function upgrade_from_1_2_1_to_1_3_0(id) {
 
     const configValue = config.get();
     if (configValue.revision && configValue.revision >= 3) {
-        return;
+        return Promise.resolve();
     }
 
     console.log('applying update from v1.2.1 to v1.3.0');
@@ -56,12 +56,28 @@ function upgrade_from_1_2_1_to_1_3_0(id) {
         });
 }
 
-module.exports = function (id) {
+function upgrade_from_1_4_0_to_1_5_0() {
+    var config = JSON.parse(fs.readFileSync('.pullquester/pullrequest.json'));
+    if (config.revision && config.revision >= 4) {
+        return;
+    }
+
+    console.log('applying update from v1.4.0 to v1.5.0');
+    var template = fs.readFileSync('./.pullquester/pullrequest.tmpl').toString();
+    template = template.replace('%> - [ ] <%- reviewer', '%><%- reviewer');
+
+    fs.writeFileSync('./.pullquester/pullrequest.tmpl', template);
+    config.revision = 4;
+    fs.writeFileSync('./.pullquester/pullrequest.json', JSON.stringify(config, null, 4));
+}
+
+module.exports = async function (id) {
     console.log('applying updates...');
+    
     upgrade_from_0_3_0_to_0_4_0();
     upgrade_from_0_7_0_to_0_8_0();
-    return upgrade_from_1_2_1_to_1_3_0(id)
-        .then(() => {
-            console.log('finished!');
-        });
+    await upgrade_from_1_2_1_to_1_3_0(id);
+    upgrade_from_1_4_0_to_1_5_0();
+
+    console.log('finished!');
 };

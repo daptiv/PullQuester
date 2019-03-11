@@ -32,5 +32,6 @@
             "message": "Did this custom question get added?"
         }
     ],
-    "revision": 2
+    "revision": 4,
+    "defaultBaseBranch": "master"
 }
