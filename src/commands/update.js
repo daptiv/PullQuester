@@ -71,13 +71,14 @@ function upgrade_from_1_4_0_to_1_5_0() {
     fs.writeFileSync('./.pullquester/pullrequest.json', JSON.stringify(config, null, 4));
 }
 
-module.exports = async function (id) {
+async function apply_updates(id) {
     console.log('applying updates...');
-    
+
     upgrade_from_0_3_0_to_0_4_0();
     upgrade_from_0_7_0_to_0_8_0();
     await upgrade_from_1_2_1_to_1_3_0(id);
     upgrade_from_1_4_0_to_1_5_0();
 
     console.log('finished!');
-};
+}
+module.exports = apply_updates;
