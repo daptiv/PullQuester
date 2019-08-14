@@ -57,13 +57,14 @@ pulled. Then just run `pull` and follow the promps.
 Command Information
 =====================
 
-### `pull [team]`
+### `pull [team] [-d]`
 
 Create a pull request for the current branch. Branch must not have any pending changes and must be pushed up to the remote.
 
 Arguments:
 
 - team (optional) - Identifier for team configuration to use instead of default configuration. May not contain spaces.
+- `-d, --draft` (optional) - Use this flag to create the pull request as a draft.
 
 Examples:
 
