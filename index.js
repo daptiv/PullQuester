@@ -32,6 +32,7 @@ function enumFilter() {
 
 program
     .option('-i, --id <id>', 'Id for the keyed template to use')
+    .option('-d, --draft', 'Create the pull request as a draft')
     .version(version);
 
 program.command('install')
@@ -56,5 +57,5 @@ program.command('update [id]')
 program.parse(process.argv);
 
 if (noCommandRan()) {
-    pullAction(program.id || program.args[0]);
+    pullAction(program.id || program.args[0], program.draft);
 }

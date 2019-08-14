@@ -112,7 +112,7 @@ function getRepoInfo() {
 function getOrganizations() {
     return wrapper.ghApi().users.getOrgs({})
         .then(orgs => {
-            return orgs.data;
+            return orgs && orgs.data;
         }, checkFor2faError);
 }
 
@@ -125,7 +125,7 @@ function getCollaborators(user, repository) {
 
     return wrapper.ghApi().repos.getCollaborators(options)
         .then(collaborators => {
-            return collaborators.data;
+            return collaborators && collaborators.data;
         }, checkFor2faError);
 }
 
@@ -136,7 +136,7 @@ function getTeams(organization) {
 
     return wrapper.ghApi().orgs.getTeams(options)
         .then(teams => {
-            return teams.data;
+            return teams && teams.data;
         }, checkFor2faError);
 }
 
@@ -147,7 +147,7 @@ function getTeamMembers(teamId) {
 
     return wrapper.ghApi().orgs.getTeamMembers(options)
         .then(members => {
-            return members.data;
+            return members && members.data;
         }, checkFor2faError);
 }
 
@@ -159,7 +159,7 @@ function getMembers(organization) {
 
     return wrapper.ghApi().orgs.getMembers(options)
         .then(members => {
-            return members.data;
+            return members && members.data;
         }, checkFor2faError);
 }
 

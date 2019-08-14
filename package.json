@@ -1,6 +1,6 @@
 {
   "name": "pullquester",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Issues a pull request using configuration files in your current repo.",
   "author": "Jonathan Park <https://github.com/park9140>, Sam Noedel <sam.noedel@gmail.com>, James Trinklein <https://github.com/jtrinklein>",
   "scripts": {
@@ -26,7 +26,7 @@
     "cross-spawn": "^5.1.0",
     "github": "11.0.0",
     "inquirer": "3.2.3",
-    "lodash": "^4.17.2",
+    "lodash": "^4.17.15",
     "mute-stream": "0.0.7",
     "q": "^1.5.0",
     "temp": "^0.8.3"
@@ -34,7 +34,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "eslint": "^3.12.2",
-    "mocha": "^3.2.0",
+    "mocha": "^6.2.0",
     "sinon": "^4.1.3"
   },
   "repository": {

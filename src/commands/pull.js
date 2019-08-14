@@ -14,7 +14,7 @@ const inquirer = require('../inquirerWrapper'),
 
 temp.track();
 
-module.exports = function (id) {
+module.exports = function (id, isDraft) {
     var gitBranchPromise = Q.nfcall(exec, 'git rev-parse --abbrev-ref HEAD').catch(function (error) {
         console.log('This is not a git repo or there was an error getting the branch name', error);
     });
@@ -116,6 +116,10 @@ module.exports = function (id) {
                         '-b', answers.baseBranch,
                         '-F', pullFile.path
                     ];
+
+                    if (isDraft) {
+                        args.push('-d');
+                    }
 
                     spawn('hub', args, { stdio: 'inherit' });
                 });
