@@ -36,6 +36,7 @@ describe('githubwrapper.js Tests', function() {
         var username = 'TestUser';
         var password = '154154';
 
+        sandbox.stub(inquirer, 'prompt').resolves({username, password});
         var result = gitHubWrapper.authenticate(username, password);
 
         expect(result).to.have.property('then');
