@@ -1,6 +1,6 @@
 'use strict';
 
-const CONFIG_REVISION = 3;
+const CONFIG_REVISION = 4;
 
 const inquirer = require('../inquirerWrapper'),
     _ = require('lodash'),
