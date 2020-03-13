@@ -10,7 +10,8 @@ const inquirer = require('../inquirerWrapper'),
     InquirerQuestionBuilder = require('../inquirerQuestionBuilder'),
     Config = require('../config'),
     Template = require('../template'),
-    parseHubIssues = require('../parseHubIssues');
+    parseHubIssues = require('../parseHubIssues')
+    packageVersion = require('../../package.json').version;
 
 temp.track();
 
@@ -23,16 +24,21 @@ module.exports = function (id, isDraft) {
         console.log('This is not a git repo or there was an error getting the issues', error);
     });
 
-    Q.all([gitBranchPromise, gitIssuesPromise])
+    var versionPromise = Q.nfcall(exec, 'npm view pullquester version').catch(function(error){
+        console.log('Unable to retrieve latest version of pullquester from npm', error)
+    });
+
+    Q.all([gitBranchPromise, gitIssuesPromise, versionPromise])
         .then(function (results) {
 
-            if (results[0] === undefined || results[1] === undefined) {
+            if (results[0] === undefined || results[1] === undefined, results[2] === undefined) {
                 throw new Error('Problem getting get information');
             }
 
             return {
                 branch: results[0][0].replace(/^\s+|\s+$/g, ''),
-                issues: parseHubIssues(results[1][0])
+                issues: parseHubIssues(results[1][0]),
+                version: results[2][0].trim()
             };
         })
         .then(function(data) {
@@ -46,10 +52,16 @@ module.exports = function (id, isDraft) {
 
             var branchname = data.branch,
                 issues = data.issues,
+                version = data.version,
                 storyIdMatches = branchname.match(/^\d+/),
                 storyId = storyIdMatches ? storyIdMatches[0] : '',
                 configValue = config.get(),
                 builder = new InquirerQuestionBuilder();
+
+            if (version !== packageVersion) {
+                console.log('A new version of pullquester is available: ' + version);
+                console.log('Run `npm install -g pullquester` to get the latest version\n');
+            }
 
             if (!configValue) {
                 let errorMsg = 'Error: Pull not initialized';
