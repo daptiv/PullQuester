@@ -26,7 +26,7 @@ module.exports = function (id, isDraft) {
     });
 
     var versionPromise = Q.nfcall(exec, 'npm view pullquester version').catch(function(error){
-        console.log('Unable to retrieve latest version of pullquester from npm', error)
+        console.log('Unable to retrieve latest version of pullquester from npm', error);
     });
 
     Q.all([gitBranchPromise, gitIssuesPromise, versionPromise])
@@ -77,7 +77,7 @@ module.exports = function (id, isDraft) {
 
             if (configValue.revision !== configRevision) {
                 console.log('PullQuester configs are out of date.');
-                console.log('Run `pull update` to apply updates.\n')
+                console.log('Run `pull update` to apply updates.\n');
             }
 
             builder
