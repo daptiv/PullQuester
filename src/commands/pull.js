@@ -11,7 +11,8 @@ const inquirer = require('../inquirerWrapper'),
     Config = require('../config'),
     Template = require('../template'),
     parseHubIssues = require('../parseHubIssues'),
-    packageVersion = require('../../package.json').version;
+    packageVersion = require('../../package.json').version,
+    configRevision = require('../constants').CONFIG_REVISION;
 
 temp.track();
 
@@ -72,6 +73,11 @@ module.exports = function (id, isDraft) {
 
                 console.log(errorMsg + ' Run `pull init` to build one for your repository');
                 return;
+            }
+
+            if (configValue.revision !== configRevision) {
+                console.log('PullQuester configs are out of date.');
+                console.log('Run `pull update` to apply updates.\n')
             }
 
             builder
