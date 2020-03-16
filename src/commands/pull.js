@@ -10,7 +10,7 @@ const inquirer = require('../inquirerWrapper'),
     InquirerQuestionBuilder = require('../inquirerQuestionBuilder'),
     Config = require('../config'),
     Template = require('../template'),
-    parseHubIssues = require('../parseHubIssues')
+    parseHubIssues = require('../parseHubIssues'),
     packageVersion = require('../../package.json').version;
 
 temp.track();
