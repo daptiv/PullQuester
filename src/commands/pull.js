@@ -31,7 +31,7 @@ module.exports = function (id, isDraft) {
     Q.all([gitBranchPromise, gitIssuesPromise, versionPromise])
         .then(function (results) {
 
-            if (results[0] === undefined || results[1] === undefined, results[2] === undefined) {
+            if (results[0] === undefined || results[1] === undefined || results[2] === undefined) {
                 throw new Error('Problem getting get information');
             }
 
