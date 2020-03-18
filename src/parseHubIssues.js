@@ -18,7 +18,7 @@ function parseHubIssues(rawIssues) {
         return aNum - bNum;
     });
     var formatted = _.map(sorted, function(i) {
-        return i.trim().replace(/(\d+)]([^\(]+)/, '#$1 [$2]');
+        return i.trim().replace(/(\d+)]([^(]+)/, '#$1 [$2]');
     });
     var issuesAndPullRequests = _.filter(formatted, function(i) {
         return i.length > 0;
