@@ -88,29 +88,30 @@ describe('githubwrapper.js Tests', function() {
     it('authenticate should use token type auth when username is `<token>`', (done) => {
         const password = 'thisisanapitoken';
         sandbox.stub(inquirer, 'prompt').resolves({username: '<token>', password});
-        gitHubWrapper.authenticate().then(() => {
-            expect(mockGithub.authenticate.calledOnce).to.be.true;
-            expect(mockGithub.authenticate.args[0][0]).to.eql({type: 'token', token: password});
-            done();
-        })
-        .catch(e => {
-            done(e);
-        });
+        gitHubWrapper.authenticate()
+            .then(() => {
+                expect(mockGithub.authenticate.calledOnce).to.be.true;
+                expect(mockGithub.authenticate.args[0][0]).to.eql({type: 'token', token: password});
+                done();
+            })
+            .catch(e => {
+                done(e);
+            });
     });
 
     it('authenticate should use basic type auth when username is anything except `<token>`', (done) => {
         const password = 'this is some password';
         const username = 'not-token';
         sandbox.stub(inquirer, 'prompt').resolves({username, password});
-        gitHubWrapper.authenticate().then(() => {
-
-            expect(mockGithub.authenticate.calledOnce).to.be.true;
-            expect(mockGithub.authenticate.args[0][0]).to.eql({type: 'basic', username, password});
-            done();
-        })
-        .catch(e => {
-            done(e);
-        });
+        gitHubWrapper.authenticate()
+            .then(() => {
+                expect(mockGithub.authenticate.calledOnce).to.be.true;
+                expect(mockGithub.authenticate.args[0][0]).to.eql({type: 'basic', username, password});
+                done();
+            })
+            .catch(e => {
+                done(e);
+            });
     });
 
     describe('2FA checks', () => {
